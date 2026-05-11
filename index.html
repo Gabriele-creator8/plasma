@@ -35,25 +35,21 @@
     <main id="content" tabindex="-1">
       <section class="hero section-dark" aria-labelledby="hero-title">
         <div class="hero__ambient" aria-hidden="true"></div>
-        <div class="hero__inner shell">
+        <div class="hero__inner">
           <div class="hero__copy reveal">
-            <p class="eyebrow">PLASMA</p>
+            <img class="hero__logo" src="assets/logo-plasma-white.png" alt="Plasma" />
             <h1 id="hero-title">SHAPE YOUR LEGACY</h1>
             <p>
               Plasma la tua realtà: crea i tuoi primi Atom e raccogli ogni frammento dei tuoi ricordi,
               anche quello custodito negli oggetti che vuoi conservare nel tempo.
             </p>
             <div class="hero__actions">
-              <a class="button button-primary" href="#download">SCARICA</a>
+              <a class="button button-primary button-download" href="#download">SCARICA</a>
               <a class="button button-ghost" href="#feature">Esplora Plasma</a>
             </div>
           </div>
-          <div class="hero__visual reveal" aria-label="Visuale immersiva di Plasma">
-            <img src="assets/hero-section.png" alt="Composizione visiva di ricordi Plasma" />
-            <div class="hero__badge glass-card" role="status" aria-live="polite">
-              <span>Atom attivo</span>
-              <strong data-active-atom>Famiglia / Nonni</strong>
-            </div>
+          <div class="hero__visual reveal" aria-label="Campo interattivo di Atom Plasma">
+            <div class="hero-atom-field" data-hero-atom-field aria-hidden="true"></div>
           </div>
         </div>
       </section>
@@ -206,7 +202,6 @@
             <p class="share-status" data-share-summary role="status" aria-live="polite">3 persone selezionate per questo Atom.</p>
           </div>
           <div class="freeze-panel" aria-label="Mockup capsula temporale Freeze">
-            <button class="button button-primary" type="button" data-freeze-action aria-pressed="false" aria-controls="freeze-summary">Freeze</button>
             <div class="freeze-controls">
               <div class="number-stepper">
                 <button type="button" data-step="day" data-delta="1" aria-label="Aumenta giorno">⌃</button>
@@ -224,6 +219,7 @@
                 <button type="button" data-step="year" data-delta="-1" aria-label="Diminuisci anno">⌄</button>
               </div>
             </div>
+            <button class="button button-freeze" type="button" data-freeze-action aria-pressed="false" aria-controls="freeze-summary">Freeze</button>
             <p id="freeze-summary" data-freeze-summary role="status" aria-live="polite">Atom congelabile fino al 02/10/20</p>
           </div>
         </div>

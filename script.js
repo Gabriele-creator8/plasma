@@ -2,6 +2,7 @@ const navToggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-nav]");
 const navLinks = Array.from(document.querySelectorAll(".site-nav a[href^='#']"));
 const navToggleLabel = navToggle ? navToggle.querySelector(".sr-only") : null;
+const heroAtomField = document.querySelector("[data-hero-atom-field]");
 
 function flash(element, className, duration) {
   if (!element) {
@@ -73,6 +74,255 @@ if ("IntersectionObserver" in window && navSections.length > 0) {
   navSections.forEach((section) => navObserver.observe(section));
 }
 
+function randomBetween(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function createRandomMemoryImage() {
+  const hue = Math.floor(randomBetween(170, 310));
+  const accent = Math.floor(randomBetween(10, 42));
+  const circles = Array.from({ length: 8 }, () => {
+    const cx = randomBetween(0, 100).toFixed(1);
+    const cy = randomBetween(0, 100).toFixed(1);
+    const radius = randomBetween(8, 34).toFixed(1);
+    const opacity = randomBetween(0.18, 0.58).toFixed(2);
+    return `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="hsla(${hue + randomBetween(-45, 45)}, 70%, 72%, ${opacity})"/>`;
+  }).join("");
+  const strokes = Array.from({ length: 5 }, () => {
+    const x1 = randomBetween(0, 100).toFixed(1);
+    const y1 = randomBetween(0, 100).toFixed(1);
+    const x2 = randomBetween(0, 100).toFixed(1);
+    const y2 = randomBetween(0, 100).toFixed(1);
+    return `<path d="M ${x1} ${y1} C ${randomBetween(0, 100).toFixed(1)} ${randomBetween(0, 100).toFixed(1)}, ${randomBetween(0, 100).toFixed(1)} ${randomBetween(0, 100).toFixed(1)}, ${x2} ${y2}" stroke="rgba(255,255,255,.42)" stroke-width="${randomBetween(0.7, 2.2).toFixed(1)}" fill="none"/>`;
+  }).join("");
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220">
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="hsl(${hue}, 48%, 28%)"/>
+          <stop offset="0.55" stop-color="hsl(${hue + accent}, 52%, 38%)"/>
+          <stop offset="1" stop-color="hsl(${hue - 80}, 46%, 16%)"/>
+        </linearGradient>
+        <filter id="grain">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
+          <feColorMatrix type="saturate" values="0"/>
+          <feComponentTransfer><feFuncA type="table" tableValues="0 .16"/></feComponentTransfer>
+        </filter>
+      </defs>
+      <rect width="220" height="220" fill="url(#bg)"/>
+      ${circles}
+      ${strokes}
+      <rect width="220" height="220" filter="url(#grain)" opacity=".35"/>
+    </svg>`;
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function initHeroAtoms() {
+  if (!heroAtomField) {
+    return;
+  }
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const bodies = [];
+  const initialAtoms = window.innerWidth < 700 ? 8 : 15;
+  const atomSpeed = 0.32;
+  const maxAtomSpeed = 0.5;
+
+  function getBounds() {
+    return {
+      width: heroAtomField.clientWidth,
+      height: heroAtomField.clientHeight,
+    };
+  }
+
+  function overlapsAny(x, y, radius, exceptBody) {
+    return bodies.some((body) => {
+      if (body === exceptBody) {
+        return false;
+      }
+
+      const dx = body.x - x;
+      const dy = body.y - y;
+      return Math.hypot(dx, dy) < body.radius + radius + 14;
+    });
+  }
+
+  function findFreePosition(radius, preferredX, preferredY) {
+    const bounds = getBounds();
+    const minX = radius;
+    const maxX = Math.max(radius, bounds.width - radius);
+    const minY = radius;
+    const maxY = Math.max(radius, bounds.height - radius);
+
+    if (typeof preferredX === "number" && typeof preferredY === "number") {
+      const x = Math.min(Math.max(preferredX, minX), maxX);
+      const y = Math.min(Math.max(preferredY, minY), maxY);
+
+      if (!overlapsAny(x, y, radius)) {
+        return { x, y };
+      }
+    }
+
+    for (let attempt = 0; attempt < 120; attempt += 1) {
+      const x = randomBetween(minX, maxX);
+      const y = randomBetween(minY, maxY);
+
+      if (!overlapsAny(x, y, radius)) {
+        return { x, y };
+      }
+    }
+
+    return {
+      x: randomBetween(minX, maxX),
+      y: randomBetween(minY, maxY),
+    };
+  }
+
+  function draw() {
+    bodies.forEach((body) => {
+      body.element.style.setProperty("--atom-x", `${body.x - body.radius}px`);
+      body.element.style.setProperty("--atom-y", `${body.y - body.radius}px`);
+    });
+  }
+
+  function addHeroAtom(x, y) {
+    const atom = document.createElement("span");
+    const image = document.createElement("img");
+    const size = randomBetween(78, 160);
+    const radius = size / 2;
+    const position = findFreePosition(radius, x, y);
+    const angle = randomBetween(0, Math.PI * 2);
+    const body = {
+      element: atom,
+      radius,
+      x: position.x,
+      y: position.y,
+      vx: Math.cos(angle) * atomSpeed,
+      vy: Math.sin(angle) * atomSpeed,
+    };
+
+    atom.className = "hero-glass-atom";
+    atom.style.setProperty("--atom-size", `${size}px`);
+    atom.style.setProperty("--atom-rotate", `${randomBetween(-14, 14).toFixed(1)}deg`);
+    image.src = createRandomMemoryImage();
+    image.alt = "";
+    atom.append(image);
+    heroAtomField.append(atom);
+    bodies.push(body);
+    draw();
+  }
+
+  function limitHeroSpeed(body) {
+    const speed = Math.hypot(body.vx, body.vy);
+
+    if (speed > maxAtomSpeed) {
+      const ratio = maxAtomSpeed / speed;
+      body.vx *= ratio;
+      body.vy *= ratio;
+    }
+  }
+
+  function resolveHeroCollisions() {
+    for (let i = 0; i < bodies.length; i += 1) {
+      for (let j = i + 1; j < bodies.length; j += 1) {
+        const a = bodies[i];
+        const b = bodies[j];
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const minDistance = a.radius + b.radius + 10;
+        const distance = Math.hypot(dx, dy) || 1;
+
+        if (distance >= minDistance) {
+          continue;
+        }
+
+        const nx = dx / distance;
+        const ny = dy / distance;
+        const overlap = (minDistance - distance) / 2;
+        a.x -= nx * overlap;
+        a.y -= ny * overlap;
+        b.x += nx * overlap;
+        b.y += ny * overlap;
+
+        const relativeVelocityX = a.vx - b.vx;
+        const relativeVelocityY = a.vy - b.vy;
+        const impact = relativeVelocityX * nx + relativeVelocityY * ny;
+
+        if (impact > 0) {
+          continue;
+        }
+
+        const impulse = -impact * 0.94;
+        a.vx += impulse * nx;
+        a.vy += impulse * ny;
+        b.vx -= impulse * nx;
+        b.vy -= impulse * ny;
+      }
+    }
+  }
+
+  function clampHeroBodies() {
+    const bounds = getBounds();
+
+    bodies.forEach((body) => {
+      body.x = Math.min(Math.max(body.x, body.radius), Math.max(body.radius, bounds.width - body.radius));
+      body.y = Math.min(Math.max(body.y, body.radius), Math.max(body.radius, bounds.height - body.radius));
+    });
+  }
+
+  for (let index = 0; index < initialAtoms; index += 1) {
+    addHeroAtom();
+  }
+
+  if (!prefersReducedMotion) {
+    let lastFrame = performance.now();
+
+    function tick(now) {
+      const bounds = getBounds();
+      const delta = Math.min(2, (now - lastFrame) / 16.67 || 1);
+      lastFrame = now;
+
+      bodies.forEach((body) => {
+        body.x += body.vx * delta;
+        body.y += body.vy * delta;
+
+        if (body.x <= body.radius || body.x >= bounds.width - body.radius) {
+          body.x = Math.min(Math.max(body.x, body.radius), bounds.width - body.radius);
+          body.vx *= -0.98;
+        }
+
+        if (body.y <= body.radius || body.y >= bounds.height - body.radius) {
+          body.y = Math.min(Math.max(body.y, body.radius), bounds.height - body.radius);
+          body.vy *= -0.98;
+        }
+
+        body.vx *= 0.999;
+        body.vy *= 0.999;
+      });
+
+      resolveHeroCollisions();
+      bodies.forEach(limitHeroSpeed);
+      clampHeroBodies();
+      draw();
+      window.requestAnimationFrame(tick);
+    }
+
+    window.requestAnimationFrame(tick);
+  }
+
+  heroAtomField.addEventListener("click", (event) => {
+    const rect = heroAtomField.getBoundingClientRect();
+    addHeroAtom(event.clientX - rect.left, event.clientY - rect.top);
+  });
+
+  window.addEventListener("resize", () => {
+    clampHeroBodies();
+    resolveHeroCollisions();
+    draw();
+  });
+}
+
 const memoryContent = {
   images: {
     title: "Immagini e Video",
@@ -134,7 +384,11 @@ function renderMemory(key) {
 }
 
 memoryButtons.forEach((button) => {
-  button.addEventListener("click", () => renderMemory(button.getAttribute("data-memory")));
+  const showMemory = () => renderMemory(button.getAttribute("data-memory"));
+
+  button.addEventListener("pointerenter", showMemory);
+  button.addEventListener("focus", showMemory);
+  button.addEventListener("click", showMemory);
 });
 
 const atomData = {
@@ -177,12 +431,26 @@ const atomData = {
 
 const atomButtons = Array.from(document.querySelectorAll("[data-atom]"));
 const atomOrder = atomButtons.map((button) => button.getAttribute("data-atom"));
+const atomOrbit = document.querySelector("[data-atom-orbit]");
 const activeAtomLabel = document.querySelector("[data-active-atom]");
 const atomStatus = document.querySelector("[data-atom-status]");
 const canvasStatus = document.querySelector("[data-canvas-status]");
 const bentoSurface = document.querySelector("[data-bento-surface]");
 const bentoTiles = bentoSurface ? Array.from(bentoSurface.querySelectorAll(".tile")) : [];
+const bentoLayoutClasses = [
+  "layout-base",
+  "layout-wide",
+  "layout-stack",
+  "layout-mosaic",
+  "layout-focus",
+  "layout-columns",
+  "layout-ribbon",
+  "layout-archive",
+  "layout-split",
+];
+const bentoLayoutNames = ["classica", "panoramica", "verticale", "mosaico", "focus", "colonne", "ribbon", "archivio", "split"];
 let activeAtomKey = "famiglia";
+let bentoLayoutIndex = 0;
 
 function updateShareSummary(prefix) {
   const shareSummary = document.querySelector("[data-share-summary]");
@@ -198,13 +466,43 @@ function updateShareSummary(prefix) {
   shareSummary.textContent = `${action}: ${names}.`;
 }
 
-function shuffleBento(toggleLayout) {
+function applyBentoLayout(index) {
   if (!bentoSurface) {
     return;
   }
 
-  if (toggleLayout) {
-    bentoSurface.classList.toggle("layout-alt");
+  bentoSurface.classList.remove(...bentoLayoutClasses);
+  bentoSurface.classList.add(bentoLayoutClasses[index]);
+}
+
+function renderBentoTiles(tiles, offset) {
+  const safeOffset = offset || 0;
+  const orderedTiles = tiles.map((_, index) => tiles[(index + safeOffset) % tiles.length]);
+
+  bentoTiles.forEach((tile, index) => {
+    tile.textContent = orderedTiles[index] || tile.textContent;
+  });
+}
+
+function shuffleBento(advanceLayout) {
+  if (!bentoSurface) {
+    return;
+  }
+
+  if (advanceLayout) {
+    bentoLayoutIndex = (bentoLayoutIndex + 1) % bentoLayoutClasses.length;
+  }
+
+  applyBentoLayout(bentoLayoutIndex);
+
+  const data = atomData[activeAtomKey];
+
+  if (data) {
+    renderBentoTiles(data.tiles, advanceLayout ? bentoLayoutIndex : 0);
+
+    if (canvasStatus) {
+      canvasStatus.textContent = `${data.canvas} · combinazione ${bentoLayoutNames[bentoLayoutIndex]}`;
+    }
   }
 
   bentoSurface.classList.add("is-shuffling");
@@ -242,10 +540,6 @@ function selectAtom(key) {
     canvasStatus.textContent = data.canvas;
   }
 
-  bentoTiles.forEach((tile, index) => {
-    tile.textContent = data.tiles[index] || tile.textContent;
-  });
-
   renderMemory(data.memory);
   shuffleBento(false);
   renderFreeze();
@@ -259,6 +553,193 @@ atomButtons.forEach((button) => {
   button.setAttribute("aria-label", isActive ? `Atom ${atomName} selezionato` : `Seleziona Atom ${atomName}`);
   button.addEventListener("click", () => selectAtom(button.getAttribute("data-atom")));
 });
+
+function initAtomPhysics() {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!atomOrbit || atomButtons.length === 0 || prefersReducedMotion) {
+    return;
+  }
+
+  atomOrbit.classList.add("is-physics");
+  const createButton = atomOrbit.querySelector("[data-create-atom]");
+
+  const bodies = atomButtons.map((element, index) => {
+    const size = element.offsetWidth || 100;
+    const xPercent = parseFloat(element.style.getPropertyValue("--x")) || 10 + index * 12;
+    const yPercent = parseFloat(element.style.getPropertyValue("--y")) || 12 + index * 10;
+    const angle = (Math.PI * 2 * index) / atomButtons.length;
+
+    return {
+      element,
+      radius: size / 2,
+      x: 0,
+      y: 0,
+      initialX: xPercent / 100,
+      initialY: yPercent / 100,
+      vx: Math.cos(angle) * (0.18 + index * 0.025),
+      vy: Math.sin(angle) * (0.16 + index * 0.022),
+    };
+  });
+
+  function getBounds() {
+    const statusHeight = atomStatus ? atomStatus.offsetHeight + 28 : 0;
+    return {
+      width: atomOrbit.clientWidth,
+      height: Math.max(240, atomOrbit.clientHeight - statusHeight),
+    };
+  }
+
+  function getCreateObstacle() {
+    if (!createButton) {
+      return null;
+    }
+
+    const orbitRect = atomOrbit.getBoundingClientRect();
+    const buttonRect = createButton.getBoundingClientRect();
+
+    return {
+      x: buttonRect.left - orbitRect.left + buttonRect.width / 2,
+      y: buttonRect.top - orbitRect.top + buttonRect.height / 2,
+      radius: Math.max(buttonRect.width, buttonRect.height) / 2 + 14,
+    };
+  }
+
+  function clampBodies() {
+    const bounds = getBounds();
+
+    bodies.forEach((body) => {
+      body.radius = (body.element.offsetWidth || body.radius * 2) / 2;
+      const maxX = Math.max(0, bounds.width - body.radius * 2);
+      const maxY = Math.max(0, bounds.height - body.radius * 2);
+      body.x = Math.min(Math.max(body.x || bounds.width * body.initialX, 0), maxX);
+      body.y = Math.min(Math.max(body.y || bounds.height * body.initialY, 0), maxY);
+    });
+  }
+
+  function resolveCollisions() {
+    const createObstacle = getCreateObstacle();
+
+    for (let i = 0; i < bodies.length; i += 1) {
+      for (let j = i + 1; j < bodies.length; j += 1) {
+        const a = bodies[i];
+        const b = bodies[j];
+        const ax = a.x + a.radius;
+        const ay = a.y + a.radius;
+        const bx = b.x + b.radius;
+        const by = b.y + b.radius;
+        const dx = bx - ax;
+        const dy = by - ay;
+        const minDistance = a.radius + b.radius + 6;
+        const distance = Math.hypot(dx, dy) || 1;
+
+        if (distance >= minDistance) {
+          continue;
+        }
+
+        const nx = dx / distance;
+        const ny = dy / distance;
+        const overlap = (minDistance - distance) / 2;
+        a.x -= nx * overlap;
+        a.y -= ny * overlap;
+        b.x += nx * overlap;
+        b.y += ny * overlap;
+
+        const relativeVelocityX = a.vx - b.vx;
+        const relativeVelocityY = a.vy - b.vy;
+        const impact = relativeVelocityX * nx + relativeVelocityY * ny;
+
+        if (impact > 0) {
+          continue;
+        }
+
+        const impulse = -impact * 0.92;
+        a.vx += impulse * nx;
+        a.vy += impulse * ny;
+        b.vx -= impulse * nx;
+        b.vy -= impulse * ny;
+      }
+
+      if (createObstacle) {
+        const body = bodies[i];
+        const centerX = body.x + body.radius;
+        const centerY = body.y + body.radius;
+        let dx = centerX - createObstacle.x;
+        let dy = centerY - createObstacle.y;
+        let distance = Math.hypot(dx, dy);
+        const minDistance = body.radius + createObstacle.radius;
+
+        if (distance === 0) {
+          const angle = Math.random() * Math.PI * 2;
+          dx = Math.cos(angle);
+          dy = Math.sin(angle);
+          distance = 1;
+        }
+
+        if (distance < minDistance) {
+          const nx = dx / distance;
+          const ny = dy / distance;
+          const overlap = minDistance - distance;
+          body.x += nx * overlap;
+          body.y += ny * overlap;
+
+          const impact = body.vx * nx + body.vy * ny;
+
+          if (impact < 0) {
+            body.vx -= impact * 1.9 * nx;
+            body.vy -= impact * 1.9 * ny;
+          }
+        }
+      }
+    }
+  }
+
+  function draw() {
+    bodies.forEach((body) => {
+      body.element.style.setProperty("--px", `${body.x}px`);
+      body.element.style.setProperty("--py", `${body.y}px`);
+    });
+  }
+
+  let lastFrame = performance.now();
+
+  function tick(now) {
+    const bounds = getBounds();
+    const delta = Math.min(2, (now - lastFrame) / 16.67 || 1);
+    lastFrame = now;
+
+    bodies.forEach((body) => {
+      body.x += body.vx * delta;
+      body.y += body.vy * delta;
+
+      const maxX = Math.max(0, bounds.width - body.radius * 2);
+      const maxY = Math.max(0, bounds.height - body.radius * 2);
+
+      if (body.x <= 0 || body.x >= maxX) {
+        body.x = Math.min(Math.max(body.x, 0), maxX);
+        body.vx *= -0.96;
+      }
+
+      if (body.y <= 0 || body.y >= maxY) {
+        body.y = Math.min(Math.max(body.y, 0), maxY);
+        body.vy *= -0.96;
+      }
+
+      body.vx *= 0.9995;
+      body.vy *= 0.9995;
+    });
+
+    resolveCollisions();
+    clampBodies();
+    draw();
+    window.requestAnimationFrame(tick);
+  }
+
+  clampBodies();
+  draw();
+  window.addEventListener("resize", clampBodies);
+  window.requestAnimationFrame(tick);
+}
 
 document.querySelectorAll("[data-create-atom]").forEach((button) => {
   button.addEventListener("click", () => {
@@ -502,3 +983,5 @@ if ("IntersectionObserver" in window) {
 }
 
 selectAtom(activeAtomKey);
+initAtomPhysics();
+initHeroAtoms();
