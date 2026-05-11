@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Plasma è un prototipo web per raccogliere, organizzare e condividere ricordi personali in Atom multimediali."
+    />
+    <title>Plasma | Shape Your Legacy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manjari:wght@100;400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand" href="#top" aria-label="Torna all'inizio">
+        <img src="assets/logo-plasma-white.png" alt="Plasma" />
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+        <span class="sr-only">Apri menu</span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Navigazione principale" data-nav>
+        <a href="#feature">FEATURE</a>
+        <a href="#download">GET PLASMA!</a>
+        <a href="#about">ABOUT</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero section-dark" aria-labelledby="hero-title">
+        <div class="hero__ambient" aria-hidden="true"></div>
+        <div class="hero__inner shell">
+          <div class="hero__copy reveal">
+            <p class="eyebrow">PLASMA</p>
+            <h1 id="hero-title">SHAPE YOUR LEGACY</h1>
+            <p>
+              Plasma la tua realtà, crea i tuoi primi Atom e raccogli ogni frammento dei tuoi ricordi,
+              anche quello custodito negli oggetti che vuoi conservare nel tempo.
+            </p>
+            <div class="hero__actions">
+              <a class="button button-primary" href="#download">SCARICA</a>
+              <a class="button button-ghost" href="#feature">Esplora Plasma</a>
+            </div>
+          </div>
+          <div class="hero__visual reveal" aria-label="Visuale immersiva di Plasma">
+            <img src="assets/hero-section.png" alt="Composizione visiva di ricordi Plasma" />
+            <div class="hero__badge glass-card">
+              <span>Atom attivo</span>
+              <strong>Nonni / Milano</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section feature-intro" id="about" aria-labelledby="intro-title">
+        <div class="shell card card-large intro-grid">
+          <div class="section-copy reveal">
+            <p class="eyebrow">CREATE</p>
+            <h2 id="intro-title">Espandi il tuo Universo di RICORDI</h2>
+            <h3>Crea il tuo primo ATOM!</h3>
+            <p class="lead">
+              Dai vita alla tua visione: plasma e trasforma le tue idee in una struttura digitale solida,
+              elegante e pronta al futuro.
+            </p>
+            <p>
+              Ogni Atom è solo l'inizio. Con Plasma puoi creare un ecosistema digitale fatto di connessioni,
+              significati e narrazioni personali. I tuoi Atom non sono semplici contenitori: sono spazi vivi,
+              dinamici, progettati per evolvere insieme a te.
+            </p>
+          </div>
+          <div class="atom-orbit reveal" aria-label="Anteprima di Atom collegati">
+            <button class="create-atom" type="button" data-create-atom aria-label="Crea un nuovo Atom">+</button>
+            <span class="atom atom-xl" style="--x: 6%; --y: 18%; --tone: #7ac9c8">Viaggio</span>
+            <span class="atom atom-lg" style="--x: 50%; --y: 9%; --tone: #9f6bb8">Famiglia</span>
+            <span class="atom atom-md" style="--x: 10%; --y: 58%; --tone: #b86b44">Lettere</span>
+            <span class="atom atom-sm" style="--x: 67%; --y: 62%; --tone: #73a7a9">Audio</span>
+            <span class="atom atom-xs" style="--x: 42%; --y: 74%; --tone: #4c3656">Ticket</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="feature" aria-labelledby="files-title">
+        <div class="shell two-card-grid">
+          <article class="card card-files reveal">
+            <div class="section-copy section-copy-centered">
+              <p class="eyebrow">FEATURE</p>
+              <h2 id="files-title">Scegli e inserisci diversi tipi di file</h2>
+              <p>
+                Esplora un nuovo modo rapido, divertente ed efficiente per raccogliere e condividere tutti
+                i ricordi che vuoi con i tuoi cari.
+              </p>
+            </div>
+            <div class="icon-row" aria-label="Tipi di contenuto supportati">
+              <button class="icon-card is-active" type="button" data-memory="images">
+                <span class="icon-shape">IMG</span>
+                <span>Immagini e Video</span>
+              </button>
+              <button class="icon-card" type="button" data-memory="audio">
+                <span class="icon-shape">AUD</span>
+                <span>Audio e Musica</span>
+              </button>
+              <button class="icon-card" type="button" data-memory="files">
+                <span class="icon-shape">PDF</span>
+                <span>File</span>
+              </button>
+              <button class="icon-card" type="button" data-memory="text">
+                <span class="icon-shape">TXT</span>
+                <span>Testi e Messaggi</span>
+              </button>
+              <button class="icon-card" type="button" data-memory="draw">
+                <span class="icon-shape">PEN</span>
+                <span>Disegna a mano</span>
+              </button>
+            </div>
+          </article>
+          <aside class="card card-note reveal" aria-live="polite" data-memory-panel>
+            <p class="eyebrow">ATOM CONTENT</p>
+            <h3 data-memory-title>Immagini e Video</h3>
+            <p data-memory-copy>
+              Carica foto e video ad alta risoluzione dei tuoi ricordi più preziosi, da una stampa ritrovata
+              a un breve filmato di famiglia.
+            </p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section canvas-section" aria-labelledby="canvas-title">
+        <div class="shell section-copy section-copy-centered reveal">
+          <p class="eyebrow">CANVAS</p>
+          <h2 id="canvas-title">Premi (+) e componi il tuo primo ATOM!</h2>
+          <p>
+            Con i Canvas dinamici di Plasma, ogni ricordo trova spazio in un Atom unico. Combina file,
+            foto e pensieri in bento box dal layout fluido per rivivere le tue esperienze in un formato
+            totalmente nuovo.
+          </p>
+        </div>
+        <div class="shell card bento-card reveal">
+          <button class="bento-action bento-action-create" type="button" aria-label="Aggiungi contenuto all'Atom" data-create-atom>+</button>
+          <button class="bento-action bento-action-refresh" type="button" aria-label="Rigenera disposizione dell'Atom" data-refresh-layout>↻</button>
+          <div class="bento-surface" data-bento-surface>
+            <div class="tile tile-photo">Foto</div>
+            <div class="tile tile-text">Lettera<br />salvata</div>
+            <div class="tile tile-audio">Voce</div>
+            <div class="tile tile-place">Milano</div>
+            <div class="tile tile-ticket">Ticket</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section enrichment" aria-labelledby="context-title">
+        <div class="shell split-grid">
+          <div class="card context-icons reveal">
+            <div class="context-icon"><span>+</span><p>Aggiungi persone</p></div>
+            <div class="context-icon"><span>⌖</span><p>Aggiungi luoghi</p></div>
+            <div class="context-icon"><span>✓</span><p>Gestisci impegni</p></div>
+            <div class="context-icon"><span>▣</span><p>Salva i biglietti</p></div>
+            <div class="context-icon context-icon-center"><span>✦</span><p>Custodisci risorse</p></div>
+          </div>
+          <article class="card card-purple reveal">
+            <p class="eyebrow">CONTEXT</p>
+            <h2 id="context-title">Aggiungi contesto ai tuoi Atom</h2>
+            <p>
+              Plasma non solo organizza i tuoi ricordi, ma li trasforma in uno spazio condiviso e operativo
+              per gestire ogni tua attività.
+            </p>
+            <ul class="feature-list">
+              <li>Collega i momenti alle persone che ami: amici, famiglia o colleghi che erano con te.</li>
+              <li>Salva la posizione esatta per non dimenticare dove i tuoi ricordi hanno avuto luogo.</li>
+              <li>Collega date, eventi e momenti chiave del calendario per ricostruire la timeline.</li>
+              <li>Carica ticket, prenotazioni e ingressi come prove tangibili delle tue avventure.</li>
+              <li>Custodisci note vocali, documenti importanti e link speciali dentro lo stesso Atom.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section share-section" aria-labelledby="share-title">
+        <div class="shell card card-teal share-grid reveal">
+          <div class="section-copy">
+            <p class="eyebrow">SHARE</p>
+            <h2 id="share-title">Scegli con chi e quando condividere!</h2>
+            <p>
+              Plasma non solo organizza i tuoi ricordi, ma si ricorda con chi e quando vuoi condividere
+              il tuo tempo, un oggetto, un evento o una storia.
+            </p>
+          </div>
+          <div class="share-panel mockup-panel" aria-label="Mockup condivisione Atom">
+            <div class="contact"><span class="avatar avatar-one"></span><strong>Mamma</strong><button type="button">✓</button></div>
+            <div class="contact"><span class="avatar avatar-two"></span><strong>Papà</strong><button type="button">✓</button></div>
+            <div class="contact"><span class="avatar avatar-three"></span><strong>Nonno</strong><button type="button">✓</button></div>
+            <button class="add-contact" type="button">Aggiungi contatto o gruppo</button>
+            <button class="button button-primary button-share" type="button">Share</button>
+          </div>
+          <div class="freeze-panel" aria-label="Mockup capsula temporale Freeze">
+            <button class="button button-primary" type="button">Freeze</button>
+            <div class="freeze-controls">
+              <div class="number-stepper">
+                <button type="button" data-step="day" data-delta="1" aria-label="Aumenta giorno">⌃</button>
+                <strong data-freeze-day>02</strong>
+                <button type="button" data-step="day" data-delta="-1" aria-label="Diminuisci giorno">⌄</button>
+              </div>
+              <div class="number-stepper">
+                <button type="button" data-step="month" data-delta="1" aria-label="Aumenta mese">⌃</button>
+                <strong data-freeze-month>10</strong>
+                <button type="button" data-step="month" data-delta="-1" aria-label="Diminuisci mese">⌄</button>
+              </div>
+              <div class="number-stepper">
+                <button type="button" data-step="year" data-delta="1" aria-label="Aumenta anno">⌃</button>
+                <strong data-freeze-year>20</strong>
+                <button type="button" data-step="year" data-delta="-1" aria-label="Diminuisci anno">⌄</button>
+              </div>
+            </div>
+            <p data-freeze-summary>Atom congelato fino al 02/10/20</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section ai-section" aria-labelledby="ai-title">
+        <div class="shell card ai-grid reveal">
+          <div class="section-copy">
+            <p class="eyebrow">AI</p>
+            <h2 id="ai-title">Powered Storytelling</h2>
+            <div class="ai-points" aria-live="polite">
+              <article>
+                <h3 data-ai-heading>Generazione di Atom tematici</h3>
+                <p data-ai-copy>Carica contenuti e lascia che l'AI costruisca per te raccolte coerenti e visivamente armoniche.</p>
+              </article>
+              <article>
+                <h3>Connessioni inattese</h3>
+                <p>L'AI propone legami tra ricordi, eventi e persone che potresti non aver considerato.</p>
+              </article>
+              <article>
+                <h3>Narrazione assistita</h3>
+                <p>Dai forma ai tuoi Atom con descrizioni, titoli e storytelling generati automaticamente.</p>
+              </article>
+            </div>
+          </div>
+          <div class="tag-column" aria-label="Categorie AI">
+            <button class="tag is-active" type="button" data-ai-tag="Ricordi">Ricordi</button>
+            <button class="tag" type="button" data-ai-tag="Paesaggi">Paesaggi</button>
+            <button class="tag" type="button" data-ai-tag="Famiglia">Famiglia</button>
+            <button class="tag" type="button" data-ai-tag="Hobby">Hobby</button>
+          </div>
+          <div class="phone-frame phone-frame-tall" aria-label="Mockup mobile con Atom generati">
+            <img src="assets/phone-shell.png" alt="Schermata mobile Plasma" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section design-section" aria-labelledby="design-title">
+        <div class="shell design-grid">
+          <div class="phone-art reveal" aria-label="Mockup Atom Nonni">
+            <div class="phone-css">
+              <div class="phone-tile tile-a">Nonni</div>
+              <div class="phone-tile tile-b"></div>
+              <div class="phone-tile tile-c"></div>
+              <div class="phone-tile tile-d">Torta di Nonna Lina</div>
+            </div>
+          </div>
+          <article class="card reveal">
+            <p class="eyebrow">DESIGN</p>
+            <h2 id="design-title">Un design che si adatta a te</h2>
+            <p>Ogni Atom è una bento box modulare, progettata per essere:</p>
+            <div class="quality-list">
+              <article><h3>Flessibile</h3><p>Adatta qualsiasi tipo di contenuto.</p></article>
+              <article><h3>Elegante</h3><p>Layout minimal, immersivo e senza distrazioni.</p></article>
+              <article><h3>Interattiva</h3><p>Esplora i tuoi ricordi in modo fluido e naturale.</p></article>
+            </div>
+            <p>
+              Personalizza colori, dimensioni e disposizione degli Atom per creare una struttura unica e riconoscibile.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section experience-section" aria-labelledby="experience-title">
+        <div class="shell card reveal">
+          <p class="eyebrow">ESPERIENZA</p>
+          <h2 id="experience-title">Colleziona, organizza, rivivi</h2>
+          <p class="lead">Plasma non è solo archiviazione: è esperienza.</p>
+          <div class="experience-grid">
+            <article><span>◌</span><h3>Rivivi momenti</h3><p>Attraverso combinazioni visive e sonore.</p></article>
+            <article><span>✺</span><h3>Organizza</h3><p>Eventi, viaggi, progetti creativi.</p></article>
+            <article><span>↗</span><h3>Condividi</h3><p>I tuoi Atom con chi vuoi, quando vuoi.</p></article>
+            <article><span>◆</span><h3>Proteggi</h3><p>I tuoi ricordi con sicurezza e privacy avanzata.</p></article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" id="download">
+      <div class="shell footer-grid">
+        <div>
+          <p class="eyebrow">GET PLASMA!</p>
+          <h2>Inizia ora a creare il tuo primo Atom</h2>
+          <p>Unisciti a Plasma e trasforma i tuoi ricordi digitali in qualcosa che resterà per sempre.</p>
+          <div class="store-buttons" aria-label="Link download app">
+            <a href="#top" aria-label="Scarica da App Store"><img src="assets/store-apple.png" alt="Disponibile su App Store" /></a>
+            <a href="#top" aria-label="Scarica da Google Play"><img src="assets/store-google.png" alt="Disponibile su Google Play" /></a>
+          </div>
+        </div>
+        <nav class="footer-links" aria-label="Link footer">
+          <a href="#top">Privacy policy</a>
+          <a href="#top">Termini di servizio</a>
+          <a href="#top">Contatti</a>
+          <a href="#top">FAQ</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
