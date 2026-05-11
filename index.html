@@ -50,7 +50,7 @@
             <img src="assets/hero-section.png" alt="Composizione visiva di ricordi Plasma" />
             <div class="hero__badge glass-card">
               <span>Atom attivo</span>
-              <strong>Nonni / Milano</strong>
+              <strong data-active-atom>Famiglia / Nonni</strong>
             </div>
           </div>
         </div>
@@ -72,13 +72,14 @@
               dinamici, progettati per evolvere insieme a te.
             </p>
           </div>
-          <div class="atom-orbit reveal" aria-label="Anteprima di Atom collegati">
+          <div class="atom-orbit reveal" aria-label="Anteprima di Atom collegati" data-atom-orbit>
             <button class="create-atom" type="button" data-create-atom aria-label="Crea un nuovo Atom">+</button>
-            <span class="atom atom-xl" style="--x: 6%; --y: 18%; --tone: #7ac9c8">Viaggio</span>
-            <span class="atom atom-lg" style="--x: 50%; --y: 9%; --tone: #9f6bb8">Famiglia</span>
-            <span class="atom atom-md" style="--x: 10%; --y: 58%; --tone: #b86b44">Lettere</span>
-            <span class="atom atom-sm" style="--x: 67%; --y: 62%; --tone: #73a7a9">Audio</span>
-            <span class="atom atom-xs" style="--x: 42%; --y: 74%; --tone: #4c3656">Ticket</span>
+            <button class="atom atom-xl" type="button" data-atom="viaggio" style="--x: 6%; --y: 18%; --tone: #7ac9c8">Viaggio</button>
+            <button class="atom atom-lg is-active" type="button" data-atom="famiglia" style="--x: 50%; --y: 9%; --tone: #9f6bb8">Famiglia</button>
+            <button class="atom atom-md" type="button" data-atom="lettere" style="--x: 10%; --y: 58%; --tone: #b86b44">Lettere</button>
+            <button class="atom atom-sm" type="button" data-atom="audio" style="--x: 67%; --y: 62%; --tone: #73a7a9">Audio</button>
+            <button class="atom atom-xs" type="button" data-atom="ticket" style="--x: 42%; --y: 74%; --tone: #4c3656">Ticket</button>
+            <p class="atom-status" data-atom-status>Atom Famiglia selezionato: ricetta, foto e voce sono pronti nel Canvas.</p>
           </div>
         </div>
       </section>
@@ -124,6 +125,11 @@
               Carica foto e video ad alta risoluzione dei tuoi ricordi più preziosi, da una stampa ritrovata
               a un breve filmato di famiglia.
             </p>
+            <div class="atom-stack" aria-hidden="true" data-memory-stack>
+              <span>foto.jpg</span>
+              <span>scansione.png</span>
+              <span>clip.mov</span>
+            </div>
           </aside>
         </div>
       </section>
@@ -141,6 +147,7 @@
         <div class="shell card bento-card reveal">
           <button class="bento-action bento-action-create" type="button" aria-label="Aggiungi contenuto all'Atom" data-create-atom>+</button>
           <button class="bento-action bento-action-refresh" type="button" aria-label="Rigenera disposizione dell'Atom" data-refresh-layout>↻</button>
+          <p class="canvas-status" data-canvas-status>Canvas Famiglia: 5 frammenti selezionati</p>
           <div class="bento-surface" data-bento-surface>
             <div class="tile tile-photo">Foto</div>
             <div class="tile tile-text">Lettera<br />salvata</div>
@@ -188,15 +195,16 @@
               il tuo tempo, un oggetto, un evento o una storia.
             </p>
           </div>
-          <div class="share-panel mockup-panel" aria-label="Mockup condivisione Atom">
-            <div class="contact"><span class="avatar avatar-one"></span><strong>Mamma</strong><button type="button">✓</button></div>
-            <div class="contact"><span class="avatar avatar-two"></span><strong>Papà</strong><button type="button">✓</button></div>
-            <div class="contact"><span class="avatar avatar-three"></span><strong>Nonno</strong><button type="button">✓</button></div>
-            <button class="add-contact" type="button">Aggiungi contatto o gruppo</button>
-            <button class="button button-primary button-share" type="button">Share</button>
+          <div class="share-panel mockup-panel" aria-label="Mockup condivisione Atom" data-share-panel>
+            <div class="contact is-selected" data-contact-row><span class="avatar avatar-one"></span><strong>Mamma</strong><button type="button" data-contact="Mamma" aria-pressed="true">✓</button></div>
+            <div class="contact is-selected" data-contact-row><span class="avatar avatar-two"></span><strong>Papà</strong><button type="button" data-contact="Papà" aria-pressed="true">✓</button></div>
+            <div class="contact is-selected" data-contact-row><span class="avatar avatar-three"></span><strong>Nonno</strong><button type="button" data-contact="Nonno" aria-pressed="true">✓</button></div>
+            <button class="add-contact" type="button" data-add-contact>Aggiungi contatto o gruppo</button>
+            <button class="button button-primary button-share" type="button" data-share-action>Share</button>
+            <p class="share-status" data-share-summary>3 persone selezionate per questo Atom.</p>
           </div>
           <div class="freeze-panel" aria-label="Mockup capsula temporale Freeze">
-            <button class="button button-primary" type="button">Freeze</button>
+            <button class="button button-primary" type="button" data-freeze-action>Freeze</button>
             <div class="freeze-controls">
               <div class="number-stepper">
                 <button type="button" data-step="day" data-delta="1" aria-label="Aumenta giorno">⌃</button>
@@ -245,8 +253,12 @@
             <button class="tag" type="button" data-ai-tag="Famiglia">Famiglia</button>
             <button class="tag" type="button" data-ai-tag="Hobby">Hobby</button>
           </div>
-          <div class="phone-frame phone-frame-tall" aria-label="Mockup mobile con Atom generati">
+          <div class="phone-frame phone-frame-tall" aria-label="Mockup mobile con Atom generati" data-ai-phone>
             <img src="assets/phone-shell.png" alt="Schermata mobile Plasma" />
+            <div class="ai-preview" aria-hidden="true">
+              <span data-ai-preview-label>Ricordi</span>
+              <strong data-ai-preview-title>5 Atom suggeriti</strong>
+            </div>
           </div>
         </div>
       </section>
