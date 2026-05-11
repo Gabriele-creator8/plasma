@@ -1,6 +1,7 @@
 const navToggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-nav]");
 const navLinks = Array.from(document.querySelectorAll(".site-nav a[href^='#']"));
+const navToggleLabel = navToggle ? navToggle.querySelector(".sr-only") : null;
 
 function flash(element, className, duration) {
   if (!element) {
@@ -18,6 +19,9 @@ function closeNav() {
 
   nav.classList.remove("is-open");
   navToggle.setAttribute("aria-expanded", "false");
+  if (navToggleLabel) {
+    navToggleLabel.textContent = "Apri menu";
+  }
   document.body.classList.remove("nav-open");
 }
 
@@ -25,6 +29,9 @@ if (navToggle && nav) {
   navToggle.addEventListener("click", () => {
     const isOpen = nav.classList.toggle("is-open");
     navToggle.setAttribute("aria-expanded", String(isOpen));
+    if (navToggleLabel) {
+      navToggleLabel.textContent = isOpen ? "Chiudi menu" : "Apri menu";
+    }
     document.body.classList.toggle("nav-open", isOpen);
   });
 
@@ -50,7 +57,13 @@ if ("IntersectionObserver" in window && navSections.length > 0) {
         }
 
         navLinks.forEach((link) => {
-          link.classList.toggle("is-active", link.getAttribute("href") === `#${entry.target.id}`);
+          const isActive = link.getAttribute("href") === `#${entry.target.id}`;
+          link.classList.toggle("is-active", isActive);
+          if (isActive) {
+            link.setAttribute("aria-current", "location");
+          } else {
+            link.removeAttribute("aria-current");
+          }
         });
       });
     },
@@ -101,7 +114,11 @@ function renderMemory(key) {
     return;
   }
 
-  memoryButtons.forEach((item) => item.classList.toggle("is-active", item.getAttribute("data-memory") === key));
+  memoryButtons.forEach((item) => {
+    const isActive = item.getAttribute("data-memory") === key;
+    item.classList.toggle("is-active", isActive);
+    item.setAttribute("aria-pressed", String(isActive));
+  });
   memoryTitle.textContent = content.title;
   memoryCopy.textContent = content.copy;
 
@@ -207,8 +224,10 @@ function selectAtom(key) {
   activeAtomKey = key;
   atomButtons.forEach((button) => {
     const isActive = button.getAttribute("data-atom") === key;
+    const atomName = button.textContent.trim();
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
+    button.setAttribute("aria-label", isActive ? `Atom ${atomName} selezionato` : `Seleziona Atom ${atomName}`);
   });
 
   if (activeAtomLabel) {
@@ -234,7 +253,10 @@ function selectAtom(key) {
 }
 
 atomButtons.forEach((button) => {
-  button.setAttribute("aria-pressed", String(button.classList.contains("is-active")));
+  const isActive = button.classList.contains("is-active");
+  const atomName = button.textContent.trim();
+  button.setAttribute("aria-pressed", String(isActive));
+  button.setAttribute("aria-label", isActive ? `Atom ${atomName} selezionato` : `Seleziona Atom ${atomName}`);
   button.addEventListener("click", () => selectAtom(button.getAttribute("data-atom")));
 });
 
@@ -291,6 +313,8 @@ function renderFreeze() {
 
   if (freezeButton) {
     freezeButton.textContent = freezeState.active ? "Frozen" : "Freeze";
+    freezeButton.setAttribute("aria-pressed", String(freezeState.active));
+    freezeButton.setAttribute("aria-label", freezeState.active ? "Disattiva Freeze per questo Atom" : "Attiva Freeze per questo Atom");
   }
 
   if (freezeSummary) {
@@ -346,6 +370,7 @@ function createContact(name) {
   button.textContent = "✓";
   button.setAttribute("data-contact", name);
   button.setAttribute("aria-pressed", "true");
+  button.setAttribute("aria-label", `Rimuovi ${name} dalla condivisione`);
   row.append(avatar, label, button);
   return row;
 }
@@ -363,8 +388,10 @@ if (sharePanel) {
     if (contactButton) {
       const row = contactButton.closest("[data-contact-row]");
       const nextState = contactButton.getAttribute("aria-pressed") !== "true";
+      const contactName = contactButton.getAttribute("data-contact") || "contatto";
       contactButton.setAttribute("aria-pressed", String(nextState));
       contactButton.textContent = nextState ? "✓" : "+";
+      contactButton.setAttribute("aria-label", nextState ? `Rimuovi ${contactName} dalla condivisione` : `Aggiungi ${contactName} alla condivisione`);
 
       if (row) {
         row.classList.toggle("is-selected", nextState);
@@ -382,6 +409,7 @@ if (addContactButton && sharePanel) {
     }
 
     addContactButton.classList.add("is-added");
+    addContactButton.setAttribute("aria-label", "Gruppo Cugini aggiunto alla condivisione");
     updateShareSummary("Nuovo gruppo aggiunto");
   });
 }
@@ -432,8 +460,11 @@ document.querySelectorAll("[data-ai-tag]").forEach((button) => {
       return;
     }
 
-    document.querySelectorAll("[data-ai-tag]").forEach((tag) => tag.classList.remove("is-active"));
-    button.classList.add("is-active");
+    document.querySelectorAll("[data-ai-tag]").forEach((tag) => {
+      const isActive = tag === button;
+      tag.classList.toggle("is-active", isActive);
+      tag.setAttribute("aria-pressed", String(isActive));
+    });
     aiHeading.textContent = content.heading;
     aiDescription.textContent = content.copy;
 
@@ -470,6 +501,4 @@ if ("IntersectionObserver" in window) {
   revealElements.forEach((element) => element.classList.add("is-visible"));
 }
 
-renderMemory("images");
-renderFreeze();
-updateShareSummary();
+selectAtom(activeAtomKey);

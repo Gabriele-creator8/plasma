@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#content">Salta al contenuto</a>
+    <span class="page-anchor" id="top" aria-hidden="true"></span>
     <header class="site-header" data-header>
       <a class="brand" href="#top" aria-label="Torna all'inizio">
         <img src="assets/logo-plasma-white.png" alt="Plasma" />
@@ -30,7 +32,7 @@
       </nav>
     </header>
 
-    <main id="top">
+    <main id="content" tabindex="-1">
       <section class="hero section-dark" aria-labelledby="hero-title">
         <div class="hero__ambient" aria-hidden="true"></div>
         <div class="hero__inner shell">
@@ -38,7 +40,7 @@
             <p class="eyebrow">PLASMA</p>
             <h1 id="hero-title">SHAPE YOUR LEGACY</h1>
             <p>
-              Plasma la tua realtà, crea i tuoi primi Atom e raccogli ogni frammento dei tuoi ricordi,
+              Plasma la tua realtà: crea i tuoi primi Atom e raccogli ogni frammento dei tuoi ricordi,
               anche quello custodito negli oggetti che vuoi conservare nel tempo.
             </p>
             <div class="hero__actions">
@@ -48,7 +50,7 @@
           </div>
           <div class="hero__visual reveal" aria-label="Visuale immersiva di Plasma">
             <img src="assets/hero-section.png" alt="Composizione visiva di ricordi Plasma" />
-            <div class="hero__badge glass-card">
+            <div class="hero__badge glass-card" role="status" aria-live="polite">
               <span>Atom attivo</span>
               <strong data-active-atom>Famiglia / Nonni</strong>
             </div>
@@ -74,12 +76,12 @@
           </div>
           <div class="atom-orbit reveal" aria-label="Anteprima di Atom collegati" data-atom-orbit>
             <button class="create-atom" type="button" data-create-atom aria-label="Crea un nuovo Atom">+</button>
-            <button class="atom atom-xl" type="button" data-atom="viaggio" style="--x: 6%; --y: 18%; --tone: #7ac9c8">Viaggio</button>
-            <button class="atom atom-lg is-active" type="button" data-atom="famiglia" style="--x: 50%; --y: 9%; --tone: #9f6bb8">Famiglia</button>
-            <button class="atom atom-md" type="button" data-atom="lettere" style="--x: 10%; --y: 58%; --tone: #b86b44">Lettere</button>
-            <button class="atom atom-sm" type="button" data-atom="audio" style="--x: 67%; --y: 62%; --tone: #73a7a9">Audio</button>
-            <button class="atom atom-xs" type="button" data-atom="ticket" style="--x: 42%; --y: 74%; --tone: #4c3656">Ticket</button>
-            <p class="atom-status" data-atom-status>Atom Famiglia selezionato: ricetta, foto e voce sono pronti nel Canvas.</p>
+            <button class="atom atom-xl" type="button" data-atom="viaggio" aria-pressed="false" style="--x: 6%; --y: 18%; --tone: #7ac9c8">Viaggio</button>
+            <button class="atom atom-lg is-active" type="button" data-atom="famiglia" aria-pressed="true" style="--x: 50%; --y: 9%; --tone: #9f6bb8">Famiglia</button>
+            <button class="atom atom-md" type="button" data-atom="lettere" aria-pressed="false" style="--x: 10%; --y: 58%; --tone: #b86b44">Lettere</button>
+            <button class="atom atom-sm" type="button" data-atom="audio" aria-pressed="false" style="--x: 67%; --y: 62%; --tone: #73a7a9">Audio</button>
+            <button class="atom atom-xs" type="button" data-atom="ticket" aria-pressed="false" style="--x: 42%; --y: 74%; --tone: #4c3656">Ticket</button>
+            <p class="atom-status" data-atom-status role="status" aria-live="polite">Atom Famiglia selezionato: ricetta, foto e voce sono pronti nel Canvas.</p>
           </div>
         </div>
       </section>
@@ -96,29 +98,29 @@
               </p>
             </div>
             <div class="icon-row" aria-label="Tipi di contenuto supportati">
-              <button class="icon-card is-active" type="button" data-memory="images">
+              <button class="icon-card is-active" type="button" data-memory="images" aria-pressed="true" aria-controls="memory-panel">
                 <span class="icon-shape">IMG</span>
                 <span>Immagini e Video</span>
               </button>
-              <button class="icon-card" type="button" data-memory="audio">
+              <button class="icon-card" type="button" data-memory="audio" aria-pressed="false" aria-controls="memory-panel">
                 <span class="icon-shape">AUD</span>
                 <span>Audio e Musica</span>
               </button>
-              <button class="icon-card" type="button" data-memory="files">
+              <button class="icon-card" type="button" data-memory="files" aria-pressed="false" aria-controls="memory-panel">
                 <span class="icon-shape">PDF</span>
                 <span>File</span>
               </button>
-              <button class="icon-card" type="button" data-memory="text">
+              <button class="icon-card" type="button" data-memory="text" aria-pressed="false" aria-controls="memory-panel">
                 <span class="icon-shape">TXT</span>
                 <span>Testi e Messaggi</span>
               </button>
-              <button class="icon-card" type="button" data-memory="draw">
+              <button class="icon-card" type="button" data-memory="draw" aria-pressed="false" aria-controls="memory-panel">
                 <span class="icon-shape">PEN</span>
                 <span>Disegna a mano</span>
               </button>
             </div>
           </article>
-          <aside class="card card-note reveal" aria-live="polite" data-memory-panel>
+          <aside class="card card-note reveal" id="memory-panel" aria-live="polite" aria-atomic="true" data-memory-panel>
             <p class="eyebrow">ATOM CONTENT</p>
             <h3 data-memory-title>Immagini e Video</h3>
             <p data-memory-copy>
@@ -147,7 +149,7 @@
         <div class="shell card bento-card reveal">
           <button class="bento-action bento-action-create" type="button" aria-label="Aggiungi contenuto all'Atom" data-create-atom>+</button>
           <button class="bento-action bento-action-refresh" type="button" aria-label="Rigenera disposizione dell'Atom" data-refresh-layout>↻</button>
-          <p class="canvas-status" data-canvas-status>Canvas Famiglia: 5 frammenti selezionati</p>
+          <p class="canvas-status" data-canvas-status role="status" aria-live="polite">Canvas Famiglia: 5 frammenti selezionati</p>
           <div class="bento-surface" data-bento-surface>
             <div class="tile tile-photo">Foto</div>
             <div class="tile tile-text">Lettera<br />salvata</div>
@@ -161,11 +163,11 @@
       <section class="section enrichment" aria-labelledby="context-title">
         <div class="shell split-grid">
           <div class="card context-icons reveal">
-            <div class="context-icon"><span>+</span><p>Aggiungi persone</p></div>
-            <div class="context-icon"><span>⌖</span><p>Aggiungi luoghi</p></div>
-            <div class="context-icon"><span>✓</span><p>Gestisci impegni</p></div>
-            <div class="context-icon"><span>▣</span><p>Salva i biglietti</p></div>
-            <div class="context-icon context-icon-center"><span>✦</span><p>Custodisci risorse</p></div>
+            <div class="context-icon"><span aria-hidden="true">+</span><p>Aggiungi persone</p></div>
+            <div class="context-icon"><span aria-hidden="true">⌖</span><p>Aggiungi luoghi</p></div>
+            <div class="context-icon"><span aria-hidden="true">✓</span><p>Gestisci impegni</p></div>
+            <div class="context-icon"><span aria-hidden="true">▣</span><p>Salva i biglietti</p></div>
+            <div class="context-icon context-icon-center"><span aria-hidden="true">✦</span><p>Custodisci risorse</p></div>
           </div>
           <article class="card card-purple reveal">
             <p class="eyebrow">CONTEXT</p>
@@ -196,15 +198,15 @@
             </p>
           </div>
           <div class="share-panel mockup-panel" aria-label="Mockup condivisione Atom" data-share-panel>
-            <div class="contact is-selected" data-contact-row><span class="avatar avatar-one"></span><strong>Mamma</strong><button type="button" data-contact="Mamma" aria-pressed="true">✓</button></div>
-            <div class="contact is-selected" data-contact-row><span class="avatar avatar-two"></span><strong>Papà</strong><button type="button" data-contact="Papà" aria-pressed="true">✓</button></div>
-            <div class="contact is-selected" data-contact-row><span class="avatar avatar-three"></span><strong>Nonno</strong><button type="button" data-contact="Nonno" aria-pressed="true">✓</button></div>
+            <div class="contact is-selected" data-contact-row><span class="avatar avatar-one" aria-hidden="true"></span><strong>Mamma</strong><button type="button" data-contact="Mamma" aria-pressed="true" aria-label="Rimuovi Mamma dalla condivisione">✓</button></div>
+            <div class="contact is-selected" data-contact-row><span class="avatar avatar-two" aria-hidden="true"></span><strong>Papà</strong><button type="button" data-contact="Papà" aria-pressed="true" aria-label="Rimuovi Papà dalla condivisione">✓</button></div>
+            <div class="contact is-selected" data-contact-row><span class="avatar avatar-three" aria-hidden="true"></span><strong>Nonno</strong><button type="button" data-contact="Nonno" aria-pressed="true" aria-label="Rimuovi Nonno dalla condivisione">✓</button></div>
             <button class="add-contact" type="button" data-add-contact>Aggiungi contatto o gruppo</button>
             <button class="button button-primary button-share" type="button" data-share-action>Share</button>
-            <p class="share-status" data-share-summary>3 persone selezionate per questo Atom.</p>
+            <p class="share-status" data-share-summary role="status" aria-live="polite">3 persone selezionate per questo Atom.</p>
           </div>
           <div class="freeze-panel" aria-label="Mockup capsula temporale Freeze">
-            <button class="button button-primary" type="button" data-freeze-action>Freeze</button>
+            <button class="button button-primary" type="button" data-freeze-action aria-pressed="false" aria-controls="freeze-summary">Freeze</button>
             <div class="freeze-controls">
               <div class="number-stepper">
                 <button type="button" data-step="day" data-delta="1" aria-label="Aumenta giorno">⌃</button>
@@ -222,7 +224,7 @@
                 <button type="button" data-step="year" data-delta="-1" aria-label="Diminuisci anno">⌄</button>
               </div>
             </div>
-            <p data-freeze-summary>Atom congelato fino al 02/10/20</p>
+            <p id="freeze-summary" data-freeze-summary role="status" aria-live="polite">Atom congelabile fino al 02/10/20</p>
           </div>
         </div>
       </section>
@@ -232,7 +234,7 @@
           <div class="section-copy">
             <p class="eyebrow">AI</p>
             <h2 id="ai-title">Powered Storytelling</h2>
-            <div class="ai-points" aria-live="polite">
+            <div class="ai-points" aria-live="polite" aria-atomic="true">
               <article>
                 <h3 data-ai-heading>Generazione di Atom tematici</h3>
                 <p data-ai-copy>Carica contenuti e lascia che l'AI costruisca per te raccolte coerenti e visivamente armoniche.</p>
@@ -248,10 +250,10 @@
             </div>
           </div>
           <div class="tag-column" aria-label="Categorie AI">
-            <button class="tag is-active" type="button" data-ai-tag="Ricordi">Ricordi</button>
-            <button class="tag" type="button" data-ai-tag="Paesaggi">Paesaggi</button>
-            <button class="tag" type="button" data-ai-tag="Famiglia">Famiglia</button>
-            <button class="tag" type="button" data-ai-tag="Hobby">Hobby</button>
+            <button class="tag is-active" type="button" data-ai-tag="Ricordi" aria-pressed="true">Ricordi</button>
+            <button class="tag" type="button" data-ai-tag="Paesaggi" aria-pressed="false">Paesaggi</button>
+            <button class="tag" type="button" data-ai-tag="Famiglia" aria-pressed="false">Famiglia</button>
+            <button class="tag" type="button" data-ai-tag="Hobby" aria-pressed="false">Hobby</button>
           </div>
           <div class="phone-frame phone-frame-tall" aria-label="Mockup mobile con Atom generati" data-ai-phone>
             <img src="assets/phone-shell.png" alt="Schermata mobile Plasma" />
@@ -295,10 +297,10 @@
           <h2 id="experience-title">Colleziona, organizza, rivivi</h2>
           <p class="lead">Plasma non è solo archiviazione: è esperienza.</p>
           <div class="experience-grid">
-            <article><span>◌</span><h3>Rivivi momenti</h3><p>Attraverso combinazioni visive e sonore.</p></article>
-            <article><span>✺</span><h3>Organizza</h3><p>Eventi, viaggi, progetti creativi.</p></article>
-            <article><span>↗</span><h3>Condividi</h3><p>I tuoi Atom con chi vuoi, quando vuoi.</p></article>
-            <article><span>◆</span><h3>Proteggi</h3><p>I tuoi ricordi con sicurezza e privacy avanzata.</p></article>
+            <article><span aria-hidden="true">◌</span><h3>Rivivi momenti</h3><p>Attraverso combinazioni visive e sonore.</p></article>
+            <article><span aria-hidden="true">✺</span><h3>Organizza</h3><p>Eventi, viaggi, progetti creativi.</p></article>
+            <article><span aria-hidden="true">↗</span><h3>Condividi</h3><p>I tuoi Atom con chi vuoi, quando vuoi.</p></article>
+            <article><span aria-hidden="true">◆</span><h3>Proteggi</h3><p>I tuoi ricordi con sicurezza e privacy avanzata.</p></article>
           </div>
         </div>
       </section>
@@ -309,7 +311,7 @@
         <div>
           <p class="eyebrow">GET PLASMA!</p>
           <h2>Inizia ora a creare il tuo primo Atom</h2>
-          <p>Unisciti a Plasma e trasforma i tuoi ricordi digitali in qualcosa che resterà per sempre.</p>
+          <p>Unisciti a Plasma e trasforma ricordi, file e oggetti digitalizzati in qualcosa che resterà per sempre.</p>
           <div class="store-buttons" aria-label="Link download app">
             <a href="#top" aria-label="Scarica da App Store"><img src="assets/store-apple.png" alt="Disponibile su App Store" /></a>
             <a href="#top" aria-label="Scarica da Google Play"><img src="assets/store-google.png" alt="Disponibile su Google Play" /></a>

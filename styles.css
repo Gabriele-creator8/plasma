@@ -103,6 +103,29 @@ footer {
   border: 0;
 }
 
+.skip-link {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 100;
+  padding: 12px 16px;
+  background: #fff;
+  border-radius: var(--radius-pill);
+  color: #030404;
+  font-weight: 700;
+  transform: translateY(-140%);
+  transition: transform 180ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.page-anchor {
+  position: absolute;
+  top: 0;
+}
+
 .shell {
   width: min(var(--max), calc(100% - 48px));
   margin-inline: auto;
