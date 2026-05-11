@@ -2,7 +2,7 @@
 
 This plan converts the Figma one-page Plasma prototype into a responsive vanilla HTML/CSS/JS presentation prototype for the Pi.Ca.Ci.U 2026 Area 1 CULTURE brief.
 
-Status: approved by the team before coding.
+Status: completed through the approved implementation milestones.
 
 ## Inputs
 
@@ -93,6 +93,13 @@ Status: approved by the team before coding.
 - Confirm there is no horizontal overflow on mobile.
 - Confirm keyboard navigation reaches links/buttons and visible focus states are present.
 - Confirm the page communicates the service without requiring an oral explanation.
+
+## Completed Milestones
+
+1. Full shell: completed in `8f7161a Add Plasma prototype shell`.
+2. Interactive layer: completed in `e9ad3d0 Add interactive Plasma demo`.
+3. Visual polish: completed in `0bf2ce0 Polish Plasma visual system`.
+4. Content and accessibility pass: completed in `7afbce4 Improve Plasma accessibility`.
 
 ## Open Risks
 
