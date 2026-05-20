@@ -1,8 +1,97 @@
 const navToggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-nav]");
+const siteHeader = document.querySelector("[data-header]");
+const heroSection = document.querySelector(".hero");
 const navLinks = Array.from(document.querySelectorAll(".site-nav a[href^='#']"));
 const navToggleLabel = navToggle ? navToggle.querySelector(".sr-only") : null;
-const heroAtomField = document.querySelector("[data-hero-atom-field]");
+const heroAtomFields = Array.from(document.querySelectorAll("[data-hero-atom-field]"));
+const heroLogo3d = document.querySelector("[data-hero-logo-3d]");
+const heroAtomImages = [
+  "assets/Atoms/Image_01.png",
+  "assets/Atoms/Image_02.png",
+  "assets/Atoms/Image_03.png",
+  "assets/Atoms/Image_04.png",
+  "assets/Atoms/Image_05.png",
+  "assets/Atoms/Image_06.png",
+  "assets/Atoms/Image_07.png",
+  "assets/Atoms/Image_08.png",
+  "assets/Atoms/Image_09.png",
+  "assets/Atoms/Image_10.png",
+  "assets/Atoms/Image_11.png",
+  "assets/Atoms/Image_12.png",
+  "assets/Atoms/Image_13.png",
+  "assets/Atoms/Image_14.png",
+  "assets/Atoms/Image_15.png",
+  "assets/Atoms/Image_16.png",
+  "assets/Atoms/Image_17.png",
+  "assets/Atoms/Image_18.png",
+  "assets/Atoms/Image_19.png",
+  "assets/Atoms/Image_20.png",
+  "assets/Atoms/Image_21.png",
+  "assets/Atoms/Image_22.png",
+  "assets/Atoms/Image_23.png",
+  "assets/Atoms/Image_24.png",
+  "assets/Atoms/Image_25.png",
+  "assets/Atoms/Image_26.png",
+  "assets/Atoms/Image_27.png",
+  "assets/Atoms/Image_28.png",
+  "assets/Atoms/Image_29.png",
+  "assets/Atoms/Image_30.png",
+  "assets/Atoms/Image_31.png",
+  "assets/Atoms/Image_32.png",
+  "assets/Atoms/Image_33.png",
+  "assets/Atoms/Image_34.png",
+  "assets/Atoms/Image_35.png",
+  "assets/Atoms/Image_36.png",
+  "assets/Atoms/Image_37.png",
+  "assets/Atoms/Image_38.png",
+  "assets/Atoms/Image_39.png",
+  "assets/Atoms/Image_40.png",
+  "assets/Atoms/Image_41.png",
+  "assets/Atoms/Image_42.png",
+  "assets/Atoms/Image_43.png",
+  "assets/Atoms/Image_44.png",
+  "assets/Atoms/Image_45.png",
+  "assets/Atoms/Image_46.png",
+  "assets/Atoms/Image_47.png",
+  "assets/Atoms/Image_49.png",
+  "assets/Atoms/Image_50.png",
+  "assets/Atoms/Image_51.png",
+  "assets/Atoms/Image_52.png",
+  "assets/Atoms/Image_53.png",
+  "assets/Atoms/Image_54.png",
+  "assets/Atoms/Image_55.png",
+  "assets/Atoms/Image_56.png",
+  "assets/Atoms/Image_57.png",
+  "assets/Atoms/Image_58.png",
+  "assets/Atoms/Image_59.png",
+  "assets/Atoms/Image_60.png",
+  "assets/Atoms/Image_61.png",
+  "assets/Atoms/Image_62.png",
+  "assets/Atoms/Image_63.png",
+  "assets/Atoms/Image_64.png",
+  "assets/Atoms/Image_65.png",
+  "assets/Atoms/Image_66.png",
+  "assets/Atoms/Image_67.png",
+  "assets/Atoms/Image_68.png",
+  "assets/Atoms/Image_69.png",
+  "assets/Atoms/Image_70.png",
+  "assets/Atoms/Image_71.png",
+  "assets/Atoms/Image_72.png",
+  "assets/Atoms/Image_73.png",
+  "assets/Atoms/Image_74.png",
+  "assets/Atoms/Image_75.png",
+  "assets/Atoms/Image_76.png",
+  "assets/Atoms/Image_77.png",
+  "assets/Atoms/Image_78.png",
+  "assets/Atoms/Image_79.png",
+  "assets/Atoms/Image_80.png",
+  "assets/Atoms/Image_81.png",
+  "assets/Atoms/Image_82.png",
+  "assets/Atoms/Image_83.png",
+  "assets/Atoms/Image_84.png",
+  "assets/Atoms/Image_85.png",
+];
 
 function flash(element, className, duration) {
   if (!element) {
@@ -41,93 +130,292 @@ if (navToggle && nav) {
 
     if (target instanceof HTMLAnchorElement) {
       closeNav();
+      scheduleHashTargetSync(target.getAttribute("href"));
     }
   });
 }
 
-const navSections = navLinks
-  .map((link) => document.querySelector(link.getAttribute("href")))
-  .filter(Boolean);
+const navTargets = navLinks
+  .map((link) => {
+    const hash = link.getAttribute("href");
+    return { hash, link, section: hash ? document.querySelector(hash) : null };
+  })
+  .filter((item) => item.hash && item.section);
+let pendingNavHash = "";
+let pendingNavUntil = 0;
 
-if ("IntersectionObserver" in window && navSections.length > 0) {
-  const navObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) {
-          return;
-        }
-
-        navLinks.forEach((link) => {
-          const isActive = link.getAttribute("href") === `#${entry.target.id}`;
-          link.classList.toggle("is-active", isActive);
-          if (isActive) {
-            link.setAttribute("aria-current", "location");
-          } else {
-            link.removeAttribute("aria-current");
-          }
-        });
-      });
-    },
-    { rootMargin: "-38% 0px -55% 0px", threshold: 0.01 }
-  );
-
-  navSections.forEach((section) => navObserver.observe(section));
+function setActiveNavLink(activeHash) {
+  navTargets.forEach(({ hash, link }) => {
+    const isActive = hash === activeHash;
+    link.classList.toggle("is-active", isActive);
+    if (isActive) {
+      link.setAttribute("aria-current", "location");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
 }
+
+function getHeaderProbeY() {
+  const headerHeight = siteHeader ? siteHeader.offsetHeight : 0;
+  return headerHeight + 16;
+}
+
+function isHeroUnderHeader() {
+  if (!siteHeader || !heroSection) {
+    return false;
+  }
+
+  const heroRect = heroSection.getBoundingClientRect();
+  return heroRect.top <= getHeaderProbeY() && heroRect.bottom > getHeaderProbeY();
+}
+
+function holdNavHash(hash) {
+  const target = navTargets.find((item) => item.hash === hash);
+
+  if (!target) {
+    pendingNavHash = "";
+    pendingNavUntil = 0;
+    setActiveNavLink("");
+    return;
+  }
+
+  pendingNavHash = hash;
+  pendingNavUntil = Date.now() + 2000;
+  setActiveNavLink(hash);
+}
+
+function scrollToPageY(targetY) {
+  const y = Math.max(0, targetY);
+  const scrollRoot = document.scrollingElement || document.documentElement;
+
+  if (scrollRoot) {
+    scrollRoot.scrollTop = y;
+  }
+
+  document.body.scrollTop = y;
+
+  if (typeof window.scrollTo === "function") {
+    window.scrollTo({ top: y, behavior: "auto" });
+  }
+}
+
+function alignHashTarget(hash) {
+  if (hash === "#top") {
+    scrollToPageY(0);
+    return;
+  }
+
+  const target = navTargets.find((item) => item.hash === hash);
+
+  if (!target) {
+    return;
+  }
+
+  const headerOffset = siteHeader ? siteHeader.offsetHeight + 14 : 0;
+  const targetTop = target.section.getBoundingClientRect().top + window.scrollY - headerOffset;
+  scrollToPageY(targetTop);
+}
+
+function updateActiveNavLink() {
+  if (navTargets.length === 0) {
+    return;
+  }
+
+  const headerProbeY = getHeaderProbeY();
+  const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  const downloadTarget = navTargets.find(({ hash }) => hash === "#download");
+
+  if (pendingNavHash && Date.now() < pendingNavUntil) {
+    setActiveNavLink(pendingNavHash);
+    return;
+  }
+
+  pendingNavHash = "";
+  pendingNavUntil = 0;
+
+  const hashTarget = navTargets.find(({ hash }) => hash === window.location.hash);
+  if (hashTarget) {
+    const hashRect = hashTarget.section.getBoundingClientRect();
+    if (hashRect.top < window.innerHeight && hashRect.bottom > headerProbeY) {
+      setActiveNavLink(hashTarget.hash);
+      return;
+    }
+  }
+
+  if (isHeroUnderHeader()) {
+    setActiveNavLink("");
+    return;
+  }
+
+  if (downloadTarget) {
+    const downloadRect = downloadTarget.section.getBoundingClientRect();
+    if (downloadRect.top <= window.innerHeight * 0.72 && downloadRect.bottom >= headerProbeY) {
+      setActiveNavLink("#download");
+      return;
+    }
+  }
+
+  if (window.scrollY >= maxScroll - 2) {
+    setActiveNavLink("#download");
+    return;
+  }
+
+  const targetAtHeader = navTargets.find(({ section }) => {
+    const rect = section.getBoundingClientRect();
+    return rect.top <= headerProbeY && rect.bottom > headerProbeY;
+  });
+
+  if (targetAtHeader) {
+    setActiveNavLink(targetAtHeader.hash);
+    return;
+  }
+
+  const probeY = window.scrollY + headerProbeY;
+  const activeTarget = navTargets
+    .filter(({ section }) => section.offsetTop <= probeY)
+    .sort((a, b) => a.section.offsetTop - b.section.offsetTop)
+    .pop();
+
+  setActiveNavLink(activeTarget ? activeTarget.hash : "");
+}
+
+function scheduleHashTargetSync(hash) {
+  if (!hash || !hash.startsWith("#")) {
+    return;
+  }
+
+  holdNavHash(hash);
+
+  [0, 80, 280, 700, 1400].forEach((delay) => {
+    window.setTimeout(() => {
+      alignHashTarget(hash);
+      updateHeaderBrandVisibility();
+      updateActiveNavLink();
+    }, delay);
+  });
+}
+
+function updateHeaderBrandVisibility() {
+  if (!siteHeader || !heroSection) {
+    return;
+  }
+
+  siteHeader.classList.toggle("is-past-hero", !isHeroUnderHeader());
+}
+
+updateHeaderBrandVisibility();
+updateActiveNavLink();
+window.addEventListener("scroll", () => {
+  updateHeaderBrandVisibility();
+  updateActiveNavLink();
+}, { passive: true });
+window.addEventListener("resize", () => {
+  updateHeaderBrandVisibility();
+  updateActiveNavLink();
+});
+window.addEventListener("hashchange", () => scheduleHashTargetSync(window.location.hash));
+window.addEventListener("load", () => scheduleHashTargetSync(window.location.hash));
 
 function randomBetween(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-function createRandomMemoryImage() {
-  const hue = Math.floor(randomBetween(170, 310));
-  const accent = Math.floor(randomBetween(10, 42));
-  const circles = Array.from({ length: 8 }, () => {
-    const cx = randomBetween(0, 100).toFixed(1);
-    const cy = randomBetween(0, 100).toFixed(1);
-    const radius = randomBetween(8, 34).toFixed(1);
-    const opacity = randomBetween(0.18, 0.58).toFixed(2);
-    return `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="hsla(${hue + randomBetween(-45, 45)}, 70%, 72%, ${opacity})"/>`;
-  }).join("");
-  const strokes = Array.from({ length: 5 }, () => {
-    const x1 = randomBetween(0, 100).toFixed(1);
-    const y1 = randomBetween(0, 100).toFixed(1);
-    const x2 = randomBetween(0, 100).toFixed(1);
-    const y2 = randomBetween(0, 100).toFixed(1);
-    return `<path d="M ${x1} ${y1} C ${randomBetween(0, 100).toFixed(1)} ${randomBetween(0, 100).toFixed(1)}, ${randomBetween(0, 100).toFixed(1)} ${randomBetween(0, 100).toFixed(1)}, ${x2} ${y2}" stroke="rgba(255,255,255,.42)" stroke-width="${randomBetween(0.7, 2.2).toFixed(1)}" fill="none"/>`;
-  }).join("");
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220">
-      <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-          <stop stop-color="hsl(${hue}, 48%, 28%)"/>
-          <stop offset="0.55" stop-color="hsl(${hue + accent}, 52%, 38%)"/>
-          <stop offset="1" stop-color="hsl(${hue - 80}, 46%, 16%)"/>
-        </linearGradient>
-        <filter id="grain">
-          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
-          <feColorMatrix type="saturate" values="0"/>
-          <feComponentTransfer><feFuncA type="table" tableValues="0 .16"/></feComponentTransfer>
-        </filter>
-      </defs>
-      <rect width="220" height="220" fill="url(#bg)"/>
-      ${circles}
-      ${strokes}
-      <rect width="220" height="220" filter="url(#grain)" opacity=".35"/>
-    </svg>`;
+function shuffleItems(items) {
+  const shuffled = [...items];
 
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
 }
 
-function initHeroAtoms() {
+function initHeroLogo3d() {
+  if (!heroLogo3d || !heroSection || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  const orbitStrength = 0.5;
+  let targetRotateX = 0;
+  let targetRotateY = 0;
+  let currentRotateX = 0;
+  let currentRotateY = 0;
+  let animationFrame = 0;
+
+  function updateLogoOrbit() {
+    currentRotateX += (targetRotateX - currentRotateX) * 0.16;
+    currentRotateY += (targetRotateY - currentRotateY) * 0.16;
+    heroLogo3d.style.setProperty("--logo-rotate-x", `${currentRotateX.toFixed(2)}deg`);
+    heroLogo3d.style.setProperty("--logo-rotate-y", `${currentRotateY.toFixed(2)}deg`);
+
+    const isSettled = Math.abs(targetRotateX - currentRotateX) < 0.02 && Math.abs(targetRotateY - currentRotateY) < 0.02;
+
+    if (isSettled) {
+      animationFrame = 0;
+      return;
+    }
+
+    animationFrame = window.requestAnimationFrame(updateLogoOrbit);
+  }
+
+  function requestLogoOrbitFrame() {
+    if (!animationFrame) {
+      animationFrame = window.requestAnimationFrame(updateLogoOrbit);
+    }
+  }
+
+  heroSection.addEventListener("mousemove", (event) => {
+    const rect = heroLogo3d.getBoundingClientRect();
+    const logoCenterX = rect.left + rect.width / 2;
+    const logoCenterY = rect.top + rect.height / 2;
+    const offsetX = Math.max(-1, Math.min(1, (event.clientX - logoCenterX) / (rect.width / 2 || 1)));
+    const offsetY = Math.max(-1, Math.min(1, (event.clientY - logoCenterY) / (rect.height / 2 || 1)));
+
+    targetRotateX = offsetY * -10 * orbitStrength;
+    targetRotateY = offsetX * 14 * orbitStrength;
+    requestLogoOrbitFrame();
+  });
+
+  heroSection.addEventListener("mouseleave", () => {
+    targetRotateX = 0;
+    targetRotateY = 0;
+    requestLogoOrbitFrame();
+  });
+}
+
+function initHeroAtoms(heroAtomField) {
   if (!heroAtomField) {
     return;
   }
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const bodies = [];
+  let heroAtomImageQueue = [];
+  let lastHeroAtomImage = "";
   const initialAtoms = window.innerWidth < 700 ? 8 : 15;
   const atomSpeed = 0.32;
   const maxAtomSpeed = 0.5;
+
+  function refillHeroAtomImages() {
+    heroAtomImageQueue = shuffleItems(heroAtomImages);
+
+    if (heroAtomImageQueue.length > 1 && heroAtomImageQueue[0] === lastHeroAtomImage) {
+      const swapIndex = heroAtomImageQueue.findIndex((image) => image !== lastHeroAtomImage);
+      [heroAtomImageQueue[0], heroAtomImageQueue[swapIndex]] = [heroAtomImageQueue[swapIndex], heroAtomImageQueue[0]];
+    }
+  }
+
+  function getNextHeroAtomImage() {
+    if (heroAtomImageQueue.length === 0) {
+      refillHeroAtomImages();
+    }
+
+    const nextImage = heroAtomImageQueue.shift() || heroAtomImages[0];
+    lastHeroAtomImage = nextImage;
+    return nextImage;
+  }
 
   function getBounds() {
     return {
@@ -205,7 +493,8 @@ function initHeroAtoms() {
     atom.className = "hero-glass-atom";
     atom.style.setProperty("--atom-size", `${size}px`);
     atom.style.setProperty("--atom-rotate", `${randomBetween(-14, 14).toFixed(1)}deg`);
-    image.src = createRandomMemoryImage();
+    image.src = getNextHeroAtomImage();
+    image.decoding = "async";
     image.alt = "";
     atom.append(image);
     heroAtomField.append(atom);
@@ -394,38 +683,59 @@ memoryButtons.forEach((button) => {
 const atomData = {
   viaggio: {
     hero: "Viaggio / Milano",
-    status: "Atom Viaggio selezionato: foto, ticket e coordinate sono pronti nel Canvas.",
-    canvas: "Canvas Viaggio: 5 frammenti selezionati",
+    status: "Atom Viaggio selezionato: foto, ticket e coordinate sono pronti nell'Atom Bento Box.",
+    canvas: "Atom Bento Box Viaggio: 5 frammenti selezionati",
     memory: "images",
     tiles: ["Foto", "Ticket", "Voce", "Milano", "Mappa"],
   },
   famiglia: {
     hero: "Famiglia / Nonni",
-    status: "Atom Famiglia selezionato: ricetta, foto e voce sono pronti nel Canvas.",
-    canvas: "Canvas Famiglia: 5 frammenti selezionati",
+    status: "Atom Famiglia selezionato: ricetta, foto e voce sono pronti nell'Atom Bento Box.",
+    canvas: "Atom Bento Box Famiglia: 5 frammenti selezionati",
     memory: "text",
     tiles: ["Foto", "Ricetta", "Voce", "Nonni", "Lettera"],
   },
   lettere: {
     hero: "Lettere / Archivio",
-    status: "Atom Lettere selezionato: scansioni, testi e note emotive sono pronti nel Canvas.",
-    canvas: "Canvas Lettere: 4 frammenti selezionati",
+    status: "Atom Lettere selezionato: scansioni, testi e note emotive sono pronti nell'Atom Bento Box.",
+    canvas: "Atom Bento Box Lettere: 4 frammenti selezionati",
     memory: "files",
     tiles: ["Scansione", "Testo", "Firma", "Data", "Busta"],
   },
   audio: {
     hero: "Audio / Voci",
-    status: "Atom Audio selezionato: voce, musica e contesto sono pronti nel Canvas.",
-    canvas: "Canvas Audio: 3 frammenti selezionati",
+    status: "Atom Audio selezionato: voce, musica e contesto sono pronti nell'Atom Bento Box.",
+    canvas: "Atom Bento Box Audio: 3 frammenti selezionati",
     memory: "audio",
     tiles: ["Voce", "Playlist", "Nota", "Persona", "Luogo"],
   },
   ticket: {
     hero: "Ticket / Eventi",
-    status: "Atom Ticket selezionato: biglietto, foto e data sono pronti nel Canvas.",
-    canvas: "Canvas Ticket: 5 frammenti selezionati",
+    status: "Atom Ticket selezionato: biglietto, foto e data sono pronti nell'Atom Bento Box.",
+    canvas: "Atom Bento Box Ticket: 5 frammenti selezionati",
     memory: "draw",
     tiles: ["Ticket", "Foto", "Sketch", "Data", "Evento"],
+  },
+  sguardi: {
+    hero: "Sguardi / Dettagli",
+    status: "Atom Sguardi selezionato: dettagli visivi e immagini sono pronti nell'Atom Bento Box.",
+    canvas: "Atom Bento Box Sguardi: 4 frammenti selezionati",
+    memory: "images",
+    tiles: ["Dettaglio", "Foto", "Colore", "Nota", "Ricordo"],
+  },
+  riflessi: {
+    hero: "Riflessi / Momenti",
+    status: "Atom Riflessi selezionato: foto, sensazioni e contesto sono pronti nell'Atom Bento Box.",
+    canvas: "Atom Bento Box Riflessi: 4 frammenti selezionati",
+    memory: "images",
+    tiles: ["Foto", "Luce", "Luogo", "Nota", "Data"],
+  },
+  voci: {
+    hero: "Voci / Ascolto",
+    status: "Atom Voci selezionato: ascolti, note vocali e persone sono pronti nell'Atom Bento Box.",
+    canvas: "Atom Bento Box Voci: 3 frammenti selezionati",
+    memory: "audio",
+    tiles: ["Voce", "Ascolto", "Persona", "Nota", "Momento"],
   },
 };
 
@@ -520,13 +830,6 @@ function selectAtom(key) {
   }
 
   activeAtomKey = key;
-  atomButtons.forEach((button) => {
-    const isActive = button.getAttribute("data-atom") === key;
-    const atomName = button.textContent.trim();
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
-    button.setAttribute("aria-label", isActive ? `Atom ${atomName} selezionato` : `Seleziona Atom ${atomName}`);
-  });
 
   if (activeAtomLabel) {
     activeAtomLabel.textContent = data.hero;
@@ -547,11 +850,9 @@ function selectAtom(key) {
 }
 
 atomButtons.forEach((button) => {
-  const isActive = button.classList.contains("is-active");
-  const atomName = button.textContent.trim();
-  button.setAttribute("aria-pressed", String(isActive));
-  button.setAttribute("aria-label", isActive ? `Atom ${atomName} selezionato` : `Seleziona Atom ${atomName}`);
-  button.addEventListener("click", () => selectAtom(button.getAttribute("data-atom")));
+  button.classList.remove("is-active");
+  button.removeAttribute("aria-pressed");
+  button.removeAttribute("aria-label");
 });
 
 function initAtomPhysics() {
@@ -562,7 +863,7 @@ function initAtomPhysics() {
   }
 
   atomOrbit.classList.add("is-physics");
-  const createButton = atomOrbit.querySelector("[data-create-atom]");
+  const createButton = atomOrbit.querySelector(".create-atom");
 
   const bodies = atomButtons.map((element, index) => {
     const size = element.offsetWidth || 100;
@@ -580,6 +881,27 @@ function initAtomPhysics() {
       vx: Math.cos(angle) * (0.18 + index * 0.025),
       vy: Math.sin(angle) * (0.16 + index * 0.022),
     };
+  });
+
+  bodies.forEach((body) => {
+    body.element.addEventListener("pointerenter", (event) => {
+      const rect = body.element.getBoundingClientRect();
+      let dx = rect.left + rect.width / 2 - event.clientX;
+      let dy = rect.top + rect.height / 2 - event.clientY;
+      let distance = Math.hypot(dx, dy);
+
+      if (distance === 0) {
+        const angle = Math.random() * Math.PI * 2;
+        dx = Math.cos(angle);
+        dy = Math.sin(angle);
+        distance = 1;
+      }
+
+      body.vx += (dx / distance) * 2.2;
+      body.vy += (dy / distance) * 2.2;
+      body.element.classList.add("is-boosted");
+      window.setTimeout(() => body.element.classList.remove("is-boosted"), 260);
+    });
   });
 
   function getBounds() {
@@ -757,6 +1079,11 @@ document.querySelectorAll("[data-refresh-layout]").forEach((button) => {
   });
 });
 
+const sharePanel = document.querySelector("[data-share-panel]");
+const shareViews = sharePanel ? Array.from(sharePanel.querySelectorAll("[data-share-view]")) : [];
+const shareContactList = document.querySelector("[data-contact-list]");
+const addContactButton = document.querySelector("[data-add-contact]");
+const shareAction = document.querySelector("[data-share-action]");
 const freezeState = {
   day: 2,
   month: 10,
@@ -772,6 +1099,20 @@ const freezeFields = {
   month: document.querySelector("[data-freeze-month]"),
   year: document.querySelector("[data-freeze-year]"),
 };
+
+function setShareMode(mode) {
+  if (!sharePanel) {
+    return;
+  }
+
+  sharePanel.setAttribute("data-share-mode", mode);
+  sharePanel.classList.toggle("is-freeze-mode", mode === "freeze");
+  shareViews.forEach((view) => {
+    const isActive = view.getAttribute("data-share-view") === mode;
+    view.hidden = !isActive;
+    view.setAttribute("aria-hidden", String(!isActive));
+  });
+}
 
 function formatNumber(value) {
   return String(value).padStart(2, "0");
@@ -806,6 +1147,8 @@ function renderFreeze() {
   }
 }
 
+setShareMode("contacts");
+
 document.querySelectorAll("[data-step]").forEach((button) => {
   button.addEventListener("click", () => {
     const field = button.getAttribute("data-step");
@@ -821,11 +1164,15 @@ document.querySelectorAll("[data-step]").forEach((button) => {
     freezeState[field] = next > max ? min : next < min ? max : next;
     renderFreeze();
     flash(freezePanel, "is-changing", 180);
+    if (freezeState.active) {
+      updateShareSummary(`Capsula temporale attiva fino al ${getFreezeDate()}`);
+    }
   });
 });
 
 if (freezeButton) {
   freezeButton.addEventListener("click", () => {
+    setShareMode("freeze");
     freezeState.active = !freezeState.active;
     renderFreeze();
     flash(freezePanel, "is-changing", 220);
@@ -833,19 +1180,28 @@ if (freezeButton) {
   });
 }
 
-const sharePanel = document.querySelector("[data-share-panel]");
-const addContactButton = document.querySelector("[data-add-contact]");
-const shareAction = document.querySelector("[data-share-action]");
-
 function createContact(name) {
+  const familyIcons = {
+    Mamma: "assets/Icons_Family/Mamma.png",
+    Nonno: "assets/Icons_Family/Nonno.png",
+    "Papà": "assets/Icons_Family/Papa.png",
+    Zia: "assets/Icons_Family/Zia.png",
+  };
   const row = document.createElement("div");
   const avatar = document.createElement("span");
+  const image = document.createElement("img");
   const label = document.createElement("strong");
   const button = document.createElement("button");
 
   row.className = "contact is-selected";
   row.setAttribute("data-contact-row", "");
-  avatar.className = "avatar avatar-two";
+  avatar.className = "avatar";
+  avatar.setAttribute("aria-hidden", "true");
+  image.src = familyIcons[name] || familyIcons.Mamma;
+  image.alt = "";
+  image.loading = "lazy";
+  image.decoding = "async";
+  avatar.append(image);
   label.textContent = name;
   button.type = "button";
   button.textContent = "✓";
@@ -885,52 +1241,72 @@ if (sharePanel) {
 
 if (addContactButton && sharePanel) {
   addContactButton.addEventListener("click", () => {
-    if (!document.querySelector("[data-contact='Cugini']")) {
-      sharePanel.insertBefore(createContact("Cugini"), addContactButton);
+    const contactName = "Mamma";
+
+    if (!document.querySelector(`[data-contact='${contactName}']`)) {
+      const contactTarget = shareContactList || addContactButton.parentElement || sharePanel;
+      contactTarget.insertBefore(createContact(contactName), addContactButton);
     }
 
     addContactButton.classList.add("is-added");
-    addContactButton.setAttribute("aria-label", "Gruppo Cugini aggiunto alla condivisione");
-    updateShareSummary("Nuovo gruppo aggiunto");
+    addContactButton.disabled = true;
+    addContactButton.hidden = true;
+    addContactButton.setAttribute("aria-label", `${contactName} aggiunta alla condivisione`);
+    updateShareSummary("Nuovo contatto aggiunto");
   });
 }
 
 if (shareAction) {
   shareAction.addEventListener("click", () => {
+    setShareMode("contacts");
     const action = freezeState.active ? `Share programmato per il ${getFreezeDate()}` : "Share pronto ora";
     updateShareSummary(action);
   });
 }
 
 const aiCopy = {
-  Ricordi: {
-    heading: "Generazione di Atom tematici",
-    copy: "Carica contenuti e lascia che l'AI costruisca per te raccolte coerenti e visivamente armoniche.",
-    preview: "5 Atom suggeriti",
+  vinili: {
+    heading: "Collezione Vinili",
+    copy: "Plasma ricompone foto, titoli e persone attorno a una collezione musicale personale.",
+    image: "assets/Mockup_mobile/Collezione%20vinili.png",
+    alt: "Mockup mobile Plasma per Collezione Vinili",
   },
-  Paesaggi: {
-    heading: "Paesaggi della memoria",
-    copy: "L'AI riconosce luoghi, stagioni e atmosfere per collegare foto, note e oggetti a un contesto visivo.",
-    preview: "3 luoghi collegati",
+  milano: {
+    heading: "Milano",
+    copy: "L'AI riconosce luoghi, stagioni e atmosfere per collegare ricordi urbani a un contesto visivo.",
+    image: "assets/Mockup_mobile/Milano.png",
+    alt: "Mockup mobile Plasma per Milano",
   },
-  Famiglia: {
-    heading: "Legami familiari",
-    copy: "Plasma suggerisce connessioni tra persone, date e storie per rendere più leggibile la memoria condivisa.",
-    preview: "4 persone connesse",
+  nonni: {
+    heading: "Nonni",
+    copy: "Plasma suggerisce connessioni tra persone, date e storie per rendere più leggibile la memoria familiare.",
+    image: "assets/Mockup_mobile/Nonni.png",
+    alt: "Mockup mobile Plasma per Nonni",
   },
-  Hobby: {
-    heading: "Passioni e rituali",
-    copy: "Ricette, musica, disegni e piccoli archivi personali diventano Atom da rivivere e trasformare.",
-    preview: "6 contenuti ordinati",
+  salone: {
+    heading: "Salone del Mobile",
+    copy: "Materiali, scatti e appunti diventano un Atom narrativo per conservare un evento creativo.",
+    image: "assets/Mockup_mobile/Salone%20del%20Mobile.png",
+    alt: "Mockup mobile Plasma per Salone del Mobile",
   },
 };
 
 const aiGrid = document.querySelector(".ai-grid");
 const aiPhone = document.querySelector("[data-ai-phone]");
+const aiPhoneImage = aiPhone ? aiPhone.querySelector("img") : null;
 const aiHeading = document.querySelector("[data-ai-heading]");
 const aiDescription = document.querySelector("[data-ai-copy]");
-const aiPreviewLabel = document.querySelector("[data-ai-preview-label]");
-const aiPreviewTitle = document.querySelector("[data-ai-preview-title]");
+const designPhone = document.querySelector("[data-design-phone]");
+
+if (designPhone && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const designLayouts = ["1", "2", "3", "4"];
+  let designLayoutIndex = 0;
+
+  window.setInterval(() => {
+    designLayoutIndex = (designLayoutIndex + 1) % designLayouts.length;
+    designPhone.setAttribute("data-layout", designLayouts[designLayoutIndex]);
+  }, 2000);
+}
 
 document.querySelectorAll("[data-ai-tag]").forEach((button) => {
   button.addEventListener("click", () => {
@@ -949,12 +1325,9 @@ document.querySelectorAll("[data-ai-tag]").forEach((button) => {
     aiHeading.textContent = content.heading;
     aiDescription.textContent = content.copy;
 
-    if (aiPreviewLabel) {
-      aiPreviewLabel.textContent = key;
-    }
-
-    if (aiPreviewTitle) {
-      aiPreviewTitle.textContent = content.preview;
+    if (aiPhoneImage) {
+      aiPhoneImage.src = content.image;
+      aiPhoneImage.alt = content.alt;
     }
 
     flash(aiGrid, "is-updating", 240);
@@ -984,4 +1357,5 @@ if ("IntersectionObserver" in window) {
 
 selectAtom(activeAtomKey);
 initAtomPhysics();
-initHeroAtoms();
+initHeroLogo3d();
+heroAtomFields.forEach(initHeroAtoms);

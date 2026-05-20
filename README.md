@@ -16,7 +16,7 @@ Then open `http://localhost:4173`.
 
 - `index.html`: page structure and section content.
 - `styles.css`: visual system, responsive layout, animations, and accessibility styles.
-- `script.js`: demo interactions for Atom selection, Canvas, Share, Freeze, AI tags, navigation, and reveal states.
+- `script.js`: demo interactions for Atom selection, Atom Bento Box, Share, Freeze, AI tags, navigation, and reveal states.
 - `assets/`: essential exported Figma assets.
 - `CONTEXT.md`: service vocabulary and project decisions.
 - `PLAN.md`: approved plan, milestones, and verification checklist.

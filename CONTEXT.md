@@ -17,7 +17,7 @@ The personal or relational meaning attached to an object, place, event, file, or
 The bubble-like cover and topic container for a modular bento box of files, media, and memory fragments.
 _Avoid_: Bubble as a public-facing synonym.
 
-**Canvas**:
+**Atom Bento Box**:
 The composition space where a user assembles files, media, text, and context before creating an **Atom**.
 
 **Freeze**:
@@ -27,7 +27,7 @@ A time-capsule feature that schedules the future unlocking or sharing of an **At
 
 - Plasma should keep the current Figma structure and content direction while adding a light, explicit connection to **Oggetto fisico** and **Memoria affettiva**.
 - An **Atom** contains multiple files or memory fragments around one specific topic.
-- A **Canvas** produces one **Atom** once the selected contents and context are assembled.
+- An **Atom Bento Box** produces one **Atom** once the selected contents and context are assembled.
 - **Freeze** applies to an **Atom** and controls when selected people can access it.
 - Plasma should remain open to a generic mix of memory scenarios rather than using one dominant narrative example.
 - The prototype should not become a different service concept unless the team explicitly changes this decision.

@@ -44,7 +44,7 @@ Status: completed through the approved implementation milestones.
 2. Hero: Plasma identity, `SHAPE YOUR LEGACY`, short service promise, primary CTA.
 3. Universe intro: `Espandi il tuo Universo di RICORDI`, first Atom creation narrative, floating Atom visual.
 4. Content types: images/video, audio/music, files, text/messages, freehand drawing.
-5. Canvas creation: `Premi (+) e componi il tuo primo ATOM!`, dynamic bento/canvas visual.
+5. Atom Bento Box creation: `Premi (+) e componi il tuo primo ATOM!`, dynamic bento visual.
 6. Context enrichment: people, places, commitments, tickets, resources.
 7. Share and Freeze: selected people plus time-capsule sharing.
 8. Powered Storytelling: AI-assisted organization and narrative support.
@@ -59,7 +59,7 @@ Status: completed through the approved implementation milestones.
 - Fix small copy issues and typos such as repeated `Generazione di Bubble tematiche`, inconsistent capitalization, and `a portata di mani`.
 - Add light references to physical objects, emotional context, and authenticity only where the brief connection is otherwise too weak.
 - Clarify `Atom` early as the topic cover/container that holds selected files and memory fragments.
-- Clarify `Canvas` as the composition space used to assemble an Atom.
+- Clarify `Atom Bento Box` as the composition space used to assemble an Atom.
 - Clarify `Freeze` as the time-capsule sharing feature.
 - Keep AI as a storytelling assistant, not the emotional center of the service.
 
@@ -75,7 +75,7 @@ Status: completed through the approved implementation milestones.
 ## Implementation Milestones
 
 1. Full shell: create `index.html`, `styles.css`, `script.js`, initial assets folder, all sections in order, responsive layout foundation, and key visual tokens.
-2. Interactive layer: add JS demo behavior for navigation, Atom/canvas, Freeze, and AI tags.
+2. Interactive layer: add JS demo behavior for navigation, Atom Bento Box, Freeze, and AI tags.
 3. Visual polish: refine desktop fidelity, spacing, gradients, mockups, animations, and mobile stacking.
 4. Content and accessibility pass: tighten copy, alt text, focus states, button labels, reduced-motion behavior, and final sanity checks.
 
