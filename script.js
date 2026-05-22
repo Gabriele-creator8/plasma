@@ -10,6 +10,7 @@ const navToggleLabel = navToggle ? navToggle.querySelector(".sr-only") : null;
 const heroAtomFields = Array.from(document.querySelectorAll("[data-hero-atom-field]"));
 const heroLogo3d = document.querySelector("[data-hero-logo-3d]");
 let themeSweepAnimation = 0;
+const themeSweepDuration = 620;
 const heroAtomImages = [
   "assets/Atoms/Image_01.png",
   "assets/Atoms/Image_02.png",
@@ -110,6 +111,10 @@ function renderThemeCircle(angle) {
   themeToggleCircle.style.backgroundImage = `conic-gradient(from 0deg, currentColor 0deg ${safeAngle}deg, transparent ${safeAngle}deg 360deg)`;
 }
 
+function easeThemeSweep(progress) {
+  return 0.5 - Math.cos(progress * Math.PI) / 2;
+}
+
 function animateThemeSweep(fromAngle, toAngle) {
   if (!themeToggleCircle) {
     return;
@@ -122,12 +127,12 @@ function animateThemeSweep(fromAngle, toAngle) {
     return;
   }
 
-  const duration = 480;
   const start = performance.now();
 
   function tick(now) {
-    const progress = Math.min(1, (now - start) / duration);
-    const angle = fromAngle + (toAngle - fromAngle) * progress;
+    const progress = Math.min(1, (now - start) / themeSweepDuration);
+    const easedProgress = easeThemeSweep(progress);
+    const angle = fromAngle + (toAngle - fromAngle) * easedProgress;
     renderThemeCircle(angle);
 
     if (progress < 1) {
@@ -171,7 +176,7 @@ if (themeToggle) {
     themeToggle.classList.remove("is-sweeping");
     void themeToggle.offsetWidth;
     themeToggle.classList.add("is-sweeping");
-    window.setTimeout(() => themeToggle.classList.remove("is-sweeping"), 500);
+    window.setTimeout(() => themeToggle.classList.remove("is-sweeping"), themeSweepDuration + 40);
     setTheme(nextTheme, { skipCircle: true });
     animateThemeSweep(getThemeSweepAngle(currentTheme), getThemeSweepAngle(nextTheme));
   });
