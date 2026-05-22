@@ -356,27 +356,21 @@ footer {
 
 .theme-toggle__icon {
   position: absolute;
+  display: none;
   width: 21px;
   height: 21px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0;
-  transform: scale(0.78) rotate(-18deg);
-  transition: opacity 180ms ease, transform 180ms ease;
-}
-
-.theme-toggle__icon-moon {
   fill: currentColor;
   stroke: none;
+  transform: scale(1);
 }
 
-:root[data-theme="light"] .theme-toggle__icon-moon,
-:root[data-theme="dark"] .theme-toggle__icon-sun {
-  opacity: 1;
-  transform: scale(1) rotate(0deg);
+.theme-toggle.is-rotating {
+  animation: themeToggleSpin 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-theme="light"] .theme-toggle__icon-light,
+html[data-theme="dark"] .theme-toggle__icon-dark {
+  display: block;
 }
 
 .nav-toggle span:not(.sr-only) {
@@ -2019,6 +2013,11 @@ li {
 @keyframes refreshButtonSpin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+@keyframes themeToggleSpin {
+  0% { rotate: 0deg; }
+  100% { rotate: 360deg; }
 }
 
 @keyframes heroAtomDrift {

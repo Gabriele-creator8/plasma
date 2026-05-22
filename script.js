@@ -118,6 +118,10 @@ if (themeToggle) {
   setTheme(document.documentElement.dataset.theme);
   themeToggle.addEventListener("click", () => {
     const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+    themeToggle.classList.remove("is-rotating");
+    void themeToggle.offsetWidth;
+    themeToggle.classList.add("is-rotating");
+    window.setTimeout(() => themeToggle.classList.remove("is-rotating"), 460);
     setTheme(currentTheme === "dark" ? "light" : "dark");
   });
 }
