@@ -9,6 +9,7 @@ const navLinks = Array.from(document.querySelectorAll(".site-nav a[href^='#']"))
 const navToggleLabel = navToggle ? navToggle.querySelector(".sr-only") : null;
 const heroAtomFields = Array.from(document.querySelectorAll("[data-hero-atom-field]"));
 const heroLogo3d = document.querySelector("[data-hero-logo-3d]");
+let themeSweepAnimation = 0;
 const heroAtomImages = [
   "assets/Atoms/Image_01.png",
   "assets/Atoms/Image_02.png",
@@ -96,7 +97,50 @@ const heroAtomImages = [
   "assets/Atoms/Image_85.png",
 ];
 
-function setTheme(theme) {
+function getThemeSweepAngle(theme) {
+  return theme === "dark" ? 180 : 360;
+}
+
+function renderThemeCircle(angle) {
+  if (!themeToggleCircle) {
+    return;
+  }
+
+  const safeAngle = Math.max(0, Math.min(360, angle));
+  themeToggleCircle.style.backgroundImage = `conic-gradient(from -90deg, currentColor 0deg ${safeAngle}deg, transparent ${safeAngle}deg 360deg)`;
+}
+
+function animateThemeSweep(fromAngle, toAngle) {
+  if (!themeToggleCircle) {
+    return;
+  }
+
+  window.cancelAnimationFrame(themeSweepAnimation);
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    renderThemeCircle(toAngle);
+    return;
+  }
+
+  const duration = 520;
+  const start = performance.now();
+
+  function tick(now) {
+    const progress = Math.min(1, (now - start) / duration);
+    const angle = fromAngle + (toAngle - fromAngle) * progress;
+    renderThemeCircle(angle);
+
+    if (progress < 1) {
+      themeSweepAnimation = window.requestAnimationFrame(tick);
+    } else {
+      themeSweepAnimation = 0;
+    }
+  }
+
+  themeSweepAnimation = window.requestAnimationFrame(tick);
+}
+
+function setTheme(theme, options = {}) {
   const nextTheme = theme === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = nextTheme;
 
@@ -108,10 +152,8 @@ function setTheme(theme) {
     themeToggle.setAttribute("title", label);
   }
 
-  if (themeToggleCircle) {
-    const circleSize = nextTheme === "dark" ? "16px" : "32px";
-    themeToggleCircle.style.width = circleSize;
-    themeToggleCircle.style.height = circleSize;
+  if (!options.skipCircle) {
+    renderThemeCircle(getThemeSweepAngle(nextTheme));
   }
 
   try {
@@ -125,11 +167,13 @@ if (themeToggle) {
   setTheme(document.documentElement.dataset.theme);
   themeToggle.addEventListener("click", () => {
     const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+    const nextTheme = currentTheme === "dark" ? "light" : "dark";
     themeToggle.classList.remove("is-sweeping");
     void themeToggle.offsetWidth;
     themeToggle.classList.add("is-sweeping");
-    window.setTimeout(() => themeToggle.classList.remove("is-sweeping"), 500);
-    setTheme(currentTheme === "dark" ? "light" : "dark");
+    window.setTimeout(() => themeToggle.classList.remove("is-sweeping"), 560);
+    setTheme(nextTheme, { skipCircle: true });
+    animateThemeSweep(getThemeSweepAngle(currentTheme), getThemeSweepAngle(nextTheme));
   });
 }
 

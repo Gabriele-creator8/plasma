@@ -356,25 +356,25 @@ footer {
 
 .theme-toggle__circle {
   position: absolute;
-  width: 32px;
-  height: 32px;
-  background: currentColor;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  transition: width 420ms cubic-bezier(0.34, 1.56, 0.64, 1), height 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: conic-gradient(from -90deg, currentColor 0deg 360deg, transparent 360deg 360deg);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 5.5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 5.5px));
+  transform-origin: center;
 }
 
 html[data-theme="light"] .theme-toggle__circle {
-  width: 32px;
-  height: 32px;
+  background: conic-gradient(from -90deg, currentColor 0deg 360deg, transparent 360deg 360deg);
 }
 
 html[data-theme="dark"] .theme-toggle__circle {
-  width: 16px;
-  height: 16px;
+  background: conic-gradient(from -90deg, currentColor 0deg 180deg, transparent 180deg 360deg);
 }
 
 .theme-toggle.is-sweeping .theme-toggle__circle {
-  animation: themeCircleSweep 460ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: themeCircleSweep 520ms linear;
 }
 
 .nav-toggle span:not(.sr-only) {
@@ -2021,7 +2021,6 @@ li {
 
 @keyframes themeCircleSweep {
   0% { rotate: 0deg; }
-  46% { rotate: 190deg; }
   100% { rotate: 360deg; }
 }
 
