@@ -420,6 +420,8 @@ body.nav-open .nav-toggle span:not(.sr-only):nth-child(3) {
 }
 
 .hero {
+  --lumen-x: 50%;
+  --lumen-y: 50%;
   display: grid;
   align-items: center;
   padding: 0;
@@ -632,7 +634,23 @@ li {
 }
 
 .hero__visual::after {
-  display: none;
+  display: block;
+  background:
+    radial-gradient(
+      circle at var(--lumen-x) var(--lumen-y),
+      rgba(var(--section-glow-rgb), 0.42) 0,
+      rgba(var(--section-glow-rgb), 0.24) 9rem,
+      rgba(var(--section-glow-rgb), 0.1) 18rem,
+      transparent 31rem
+    );
+  filter: blur(18px) saturate(1.2);
+  opacity: 0;
+  transition: opacity 260ms ease;
+  will-change: background, opacity;
+}
+
+.hero.is-lumen-active .hero__visual::after {
+  opacity: 1;
 }
 
 .hero__visual > img {

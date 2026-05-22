@@ -3,6 +3,7 @@ const nav = document.querySelector("[data-nav]");
 const siteHeader = document.querySelector("[data-header]");
 const themeToggle = document.querySelector("[data-theme-toggle]");
 const heroSection = document.querySelector(".hero");
+const heroVisual = heroSection ? heroSection.querySelector(".hero__visual") : null;
 const navLinks = Array.from(document.querySelectorAll(".site-nav a[href^='#']"));
 const navToggleLabel = navToggle ? navToggle.querySelector(".sr-only") : null;
 const heroAtomFields = Array.from(document.querySelectorAll("[data-hero-atom-field]"));
@@ -358,6 +359,88 @@ function shuffleItems(items) {
   }
 
   return shuffled;
+}
+
+function initHeroLumen() {
+  if (!heroSection || !heroVisual) {
+    return;
+  }
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let animationFrame = 0;
+
+  function setLumenPosition(x, y) {
+    heroSection.style.setProperty("--lumen-x", `${x.toFixed(1)}px`);
+    heroSection.style.setProperty("--lumen-y", `${y.toFixed(1)}px`);
+  }
+
+  function readPointerPosition(event) {
+    const rect = heroVisual.getBoundingClientRect();
+    return {
+      x: Math.min(Math.max(event.clientX - rect.left, 0), rect.width),
+      y: Math.min(Math.max(event.clientY - rect.top, 0), rect.height),
+    };
+  }
+
+  function updateLumen() {
+    currentX += (targetX - currentX) * 0.18;
+    currentY += (targetY - currentY) * 0.18;
+    setLumenPosition(currentX, currentY);
+
+    const isSettled = Math.abs(targetX - currentX) < 0.35 && Math.abs(targetY - currentY) < 0.35;
+
+    if (isSettled) {
+      currentX = targetX;
+      currentY = targetY;
+      setLumenPosition(currentX, currentY);
+      animationFrame = 0;
+      return;
+    }
+
+    animationFrame = window.requestAnimationFrame(updateLumen);
+  }
+
+  function requestLumenFrame() {
+    if (!animationFrame) {
+      animationFrame = window.requestAnimationFrame(updateLumen);
+    }
+  }
+
+  function moveLumen(event) {
+    const position = readPointerPosition(event);
+    targetX = position.x;
+    targetY = position.y;
+    heroSection.classList.add("is-lumen-active");
+
+    if (prefersReducedMotion) {
+      currentX = targetX;
+      currentY = targetY;
+      setLumenPosition(currentX, currentY);
+      return;
+    }
+
+    requestLumenFrame();
+  }
+
+  heroSection.addEventListener("pointerenter", (event) => {
+    const position = readPointerPosition(event);
+    targetX = position.x;
+    targetY = position.y;
+    currentX = position.x;
+    currentY = position.y;
+    setLumenPosition(currentX, currentY);
+    heroSection.classList.add("is-lumen-active");
+  });
+
+  heroSection.addEventListener("pointermove", moveLumen);
+
+  heroSection.addEventListener("pointerleave", () => {
+    heroSection.classList.remove("is-lumen-active");
+  });
 }
 
 function initHeroLogo3d() {
@@ -1385,5 +1468,6 @@ if ("IntersectionObserver" in window) {
 
 selectAtom(activeAtomKey);
 initAtomPhysics();
+initHeroLumen();
 initHeroLogo3d();
 heroAtomFields.forEach(initHeroAtoms);
