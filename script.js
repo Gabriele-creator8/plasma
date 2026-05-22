@@ -2,6 +2,7 @@ const navToggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-nav]");
 const siteHeader = document.querySelector("[data-header]");
 const themeToggle = document.querySelector("[data-theme-toggle]");
+const themeToggleCircle = themeToggle ? themeToggle.querySelector(".theme-toggle__circle") : null;
 const heroSection = document.querySelector(".hero");
 const heroVisual = heroSection ? heroSection.querySelector(".hero__visual") : null;
 const navLinks = Array.from(document.querySelectorAll(".site-nav a[href^='#']"));
@@ -107,6 +108,12 @@ function setTheme(theme) {
     themeToggle.setAttribute("title", label);
   }
 
+  if (themeToggleCircle) {
+    const circleSize = nextTheme === "dark" ? "16px" : "32px";
+    themeToggleCircle.style.width = circleSize;
+    themeToggleCircle.style.height = circleSize;
+  }
+
   try {
     window.localStorage.setItem("plasma-theme", nextTheme);
   } catch (error) {
@@ -118,10 +125,10 @@ if (themeToggle) {
   setTheme(document.documentElement.dataset.theme);
   themeToggle.addEventListener("click", () => {
     const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
-    themeToggle.classList.remove("is-rotating");
+    themeToggle.classList.remove("is-sweeping");
     void themeToggle.offsetWidth;
-    themeToggle.classList.add("is-rotating");
-    window.setTimeout(() => themeToggle.classList.remove("is-rotating"), 460);
+    themeToggle.classList.add("is-sweeping");
+    window.setTimeout(() => themeToggle.classList.remove("is-sweeping"), 500);
     setTheme(currentTheme === "dark" ? "light" : "dark");
   });
 }
