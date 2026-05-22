@@ -107,7 +107,7 @@ function renderThemeCircle(angle) {
   }
 
   const safeAngle = Math.max(0, Math.min(360, angle));
-  themeToggleCircle.style.backgroundImage = `conic-gradient(from -90deg, currentColor 0deg ${safeAngle}deg, transparent ${safeAngle}deg 360deg)`;
+  themeToggleCircle.style.backgroundImage = `conic-gradient(from 0deg, currentColor 0deg ${safeAngle}deg, transparent ${safeAngle}deg 360deg)`;
 }
 
 function animateThemeSweep(fromAngle, toAngle) {
@@ -122,7 +122,7 @@ function animateThemeSweep(fromAngle, toAngle) {
     return;
   }
 
-  const duration = 520;
+  const duration = 480;
   const start = performance.now();
 
   function tick(now) {
@@ -171,7 +171,7 @@ if (themeToggle) {
     themeToggle.classList.remove("is-sweeping");
     void themeToggle.offsetWidth;
     themeToggle.classList.add("is-sweeping");
-    window.setTimeout(() => themeToggle.classList.remove("is-sweeping"), 560);
+    window.setTimeout(() => themeToggle.classList.remove("is-sweeping"), 500);
     setTheme(nextTheme, { skipCircle: true });
     animateThemeSweep(getThemeSweepAngle(currentTheme), getThemeSweepAngle(nextTheme));
   });
