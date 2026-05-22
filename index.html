@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="it">
+<html lang="it" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,6 +8,16 @@
       content="Plasma è un prototipo web per raccogliere, organizzare e condividere ricordi personali in Atom multimediali."
     />
     <title>Plasma | Shape Your Legacy</title>
+    <script>
+      (() => {
+        try {
+          const savedTheme = window.localStorage.getItem("plasma-theme");
+          document.documentElement.dataset.theme = savedTheme === "dark" ? "dark" : "light";
+        } catch (error) {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manjari:wght@100;400;700&display=swap" rel="stylesheet" />
@@ -28,7 +38,18 @@
       <nav class="site-nav" id="site-nav" aria-label="Navigazione principale" data-nav>
         <a href="#feature">FEATURE</a>
         <a href="#download">GET PLASMA!</a>
-        <a href="#about">ABOUT</a>
+        <span class="nav-actions">
+          <a href="#about">ABOUT</a>
+          <button class="theme-toggle" type="button" data-theme-toggle aria-label="Passa alla modalità scura" aria-pressed="false">
+            <svg class="theme-toggle__icon theme-toggle__icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M20.5 14.6A8 8 0 0 1 9.4 3.5a7.9 7.9 0 1 0 11.1 11.1Z" />
+            </svg>
+            <svg class="theme-toggle__icon theme-toggle__icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2.5v2.2M12 19.3v2.2M4.7 4.7l1.6 1.6M17.7 17.7l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.7 19.3l1.6-1.6M17.7 6.3l1.6-1.6" />
+            </svg>
+          </button>
+        </span>
       </nav>
     </header>
 

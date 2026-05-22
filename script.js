@@ -1,6 +1,7 @@
 const navToggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-nav]");
 const siteHeader = document.querySelector("[data-header]");
+const themeToggle = document.querySelector("[data-theme-toggle]");
 const heroSection = document.querySelector(".hero");
 const navLinks = Array.from(document.querySelectorAll(".site-nav a[href^='#']"));
 const navToggleLabel = navToggle ? navToggle.querySelector(".sr-only") : null;
@@ -92,6 +93,33 @@ const heroAtomImages = [
   "assets/Atoms/Image_84.png",
   "assets/Atoms/Image_85.png",
 ];
+
+function setTheme(theme) {
+  const nextTheme = theme === "dark" ? "dark" : "light";
+  document.documentElement.dataset.theme = nextTheme;
+
+  if (themeToggle) {
+    const isDark = nextTheme === "dark";
+    const label = isDark ? "Passa alla modalità chiara" : "Passa alla modalità scura";
+    themeToggle.setAttribute("aria-label", label);
+    themeToggle.setAttribute("aria-pressed", String(isDark));
+    themeToggle.setAttribute("title", label);
+  }
+
+  try {
+    window.localStorage.setItem("plasma-theme", nextTheme);
+  } catch (error) {
+    // Theme persistence is a convenience; the toggle should still work without storage.
+  }
+}
+
+if (themeToggle) {
+  setTheme(document.documentElement.dataset.theme);
+  themeToggle.addEventListener("click", () => {
+    const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+    setTheme(currentTheme === "dark" ? "light" : "dark");
+  });
+}
 
 function flash(element, className, duration) {
   if (!element) {
