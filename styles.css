@@ -615,7 +615,7 @@ li {
   border-radius: 0;
   overflow: hidden;
   background: var(--bg);
-  box-shadow: 0 26px 90px rgba(0, 0, 0, 0.22), 0 0 0 1px var(--hero-visual-border);
+  box-shadow: none;
 }
 
 .hero__visual::before,
@@ -628,7 +628,7 @@ li {
 }
 
 .hero__visual::before {
-  background: var(--hero-visual-overlay);
+  display: none;
 }
 
 .hero__visual::after {
