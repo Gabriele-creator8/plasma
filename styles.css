@@ -620,6 +620,8 @@ li {
   overflow: hidden;
   background: var(--bg);
   box-shadow: none;
+  position: absolute;
+  inset: -72px 0 0 0;
 }
 
 .hero__visual::before,
